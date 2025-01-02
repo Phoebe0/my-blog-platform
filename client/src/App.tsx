@@ -1,10 +1,11 @@
 
-import './App.css'
-import Article from './views/Article'
+import Home from './views/Home/Home'
+// import DataZoom from './views/DataZoom.tsx'
 function App() {
 
   return (
-      <Article />
+      <Home />
+      // <DataZoom />
   )
 }
 
