@@ -1,0 +1,79 @@
+/* 容器样式 */
+.container {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+}
+
+.container:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 封面图片容器 */
+.container img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* 底部信息容器 */
+.bottomContainer {
+    margin-top: 12px;
+}
+
+/* 文章标题 */
+.title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* 文章摘要 */
+.summary {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+/* 元数据容器（日期、阅读数、评论数） */
+.bottomContainer > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bottomContainer > div p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #888;
+}
+
+.bottomContainer > div p span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* 元数据图标 */
+.bottomContainer > div p img {
+    width: 16px;
+    height: 16px;
+}
+
+/* 阅读全文 */
+.lastSpan {
+    font-size: 14px;
+    color: #007bff;
+    cursor: pointer;
+}
+
+.lastSpan:hover {
+    text-decoration: underline;
+}
