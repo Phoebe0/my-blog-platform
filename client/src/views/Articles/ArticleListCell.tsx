@@ -9,7 +9,6 @@ interface Article {
     viewCount: number; // 阅读数
     commentCount: number; // 评论数
 }
-
 // 定义组件的 Props 类型
 interface ArticleListCellProps {
     data: Article; // 文章数据
