@@ -1,14 +1,7 @@
-// import React from 'react';
-import  ArticleListCell  from './ArticleListCell.tsx';
-
-const fakeData = {
-    _id: '12345',
-    title: '这是一篇测试文章',
-    coverImg: 'https://via.placeholder.com/150', // 假图片 URL
-    time: '2023-10-01',
-    viewCount: 100,
-    commentCount: 20,
-};
+import React from 'react';
+import ArticleListCell from './ArticleListCell.tsx';
+import { mockArticles } from '../../mock/articles';
+import style from '../../styles/style.module.css';
 // // 定义文章数据的类型
 // interface Article {
 //     // 柑橘fakeData定义文章数据类型
@@ -29,14 +22,14 @@ const fakeData = {
 // }
 
 // 使用 React.memo 优化性能，避免不必要的渲染
-const ArticleList = () => {
+const ArticleList = React.memo(() => {
     return (
-        <div>
-
-        <ArticleListCell data={fakeData} />
-
+        <div className={style.articleList}>
+            {mockArticles.map(article => (
+                <ArticleListCell key={article._id} data={article} />
+            ))}
         </div>
     );
-};
+});
 
 export default ArticleList;
