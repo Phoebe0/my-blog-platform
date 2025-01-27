@@ -1,13 +1,19 @@
 
-// import Home from './views/Home/Home'
-// import DataZoom from './views/DataZoom.tsx'
-function App() {
+import BlogNav from './components/BolgNav.tsx'
 
+import './index.css'
+
+const App = () => {
     return (
-        <div className='px-4'>hello world</div>
-        // <Home />
-        // <DataZoom />
-    )
-}
+        <div className='px-4 '>
+            {/*navbar*/}
+            <BlogNav></BlogNav>
+            {/*breadcrumb*/}
+            {/*introduction*/}
+            {/*feature posts*/}
+            {/*post list*/}
+        </div>
+    );
+};
 
-export default App
+export default App;
