@@ -1,10 +1,8 @@
 
 import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
+import AppRoutes from "./routers";
+createRoot(document.getElementById("root")!).render(
 
+        <AppRoutes />
 
-createRoot(document.getElementById('root')!).render(
-
-    <App />
-
-)
+);
