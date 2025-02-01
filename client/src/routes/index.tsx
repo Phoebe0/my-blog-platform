@@ -6,9 +6,10 @@ import LoginRouter  from "./LoginRouter.tsx";
 import RegisterRouter from "./RegisterRouter.tsx";
 import SinglePostRouter from "./SinglePostRouter.tsx";
 import WriteBlogRouter from "./WriteBlogRouter.tsx";
+import MainLayout from "../layouts/MainLayout.tsx";
 const router = createBrowserRouter([
     {
-        // element: <PublicLayout />, // 公共布局
+        element: <MainLayout/>, // 公共布局
         children: [
             ...HomeRouter,
             ...LoginRouter,
