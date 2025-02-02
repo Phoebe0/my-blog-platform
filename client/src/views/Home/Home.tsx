@@ -19,12 +19,14 @@ const Home = () => {
                     </p>
                 </div>
             {/*动态按钮*/}
-                <Link to='/write' className=''>
+            {/*小屏幕不显示，只有middle之后才显示*/}
+                <Link to='/write' className='hidden md:block relative '>
                     <svg
                         viewBox='0 0 200 200'
                         width='200'
                         height='200'
-                        className='text-lg tracking-widest font-serif'
+                        className='text-lg tracking-widest font-serif animate-spin animateTime'
+
                     >
                         <path
                             id='circlePath'
@@ -36,9 +38,8 @@ const Home = () => {
                             <textPath href='#circlePath' startOffset='50%'>·意载乾坤·</textPath>
                         </text>
                     </svg>
-                    <button className='absolute top-52 right-32 bg-gray-500 rounded-full flex justify-center items-center'>
+                    <button className='absolute top-0 right-0  bottom-0 left-0 m-auto w-20 h-20 bg-purple-500 rounded-full flex justify-center items-center'>
                         <svg
-                            // className='absolute top-0-10'
                             width="50"
                             height="50"
                             viewBox="0 0 24 24"
