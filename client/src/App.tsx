@@ -1,6 +1,3 @@
-
-import BlogNav from './components/BolgNav.tsx'
-
 import './index.css'
 
 const App = () => {

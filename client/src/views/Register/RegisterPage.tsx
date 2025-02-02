@@ -1,8 +1,10 @@
+import { SignUp} from "@clerk/clerk-react";
 
 const RegisterPage = () => {
     return (
-        <div>
-            RegisterPage
+        <div className='flex items-center justify-center h-[calc(100vh-80px)]'>
+            {/*点击signIn时重定向到 登陆页面*/}
+            <SignUp signInUrl='/login'/>
         </div>
     );
 };

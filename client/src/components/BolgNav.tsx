@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Image from "./Image.tsx";
+import {Link} from "react-router-dom";
+import {SignedIn, SignedOut, UserButton} from "@clerk/clerk-react";
 
 const BlogNav: React.FC = () => {
     // 下拉菜单状态
@@ -8,10 +10,11 @@ const BlogNav: React.FC = () => {
     return (
         <div className='w-full h-16 md:h-20 flex items-center justify-between'>
             {/* logo */}
-            <div className='flex items-center gap-2 text-l font-bold font-serif'>
+            {/*使用Link组件，路由导航到根目录下面*/}
+            <Link to='/' className='flex items-center gap-2 text-l font-bold font-serif'>
                 <Image path='/MyBlogImgs/logo.png' className='w-10 h-10 rounded-full' width={32} height={32} alt='logo' />
                 <span>Tricia's Blog</span>
-            </div>
+            </Link>
             {/* 移动端按钮 */}
             <div className='md:hidden'>
                 {/* 汉堡按钮 */}
@@ -22,24 +25,30 @@ const BlogNav: React.FC = () => {
                 <div className={`w-full h-screen flex flex-col items-center justify-center absolute top-16 
                 ${open ? '-right-0' : '-right-[100%]'} bg-white bg-opacity-50 gap-8 font-medium text-lg transition-all ease-in-out`}
                 >
-                    <a href="#">Home</a>
-                    <a href="#">Trending</a>
-                    <a href="#">Like</a>
-                    <a href="#">About</a>
-                    <a href="#">
+                    <Link to='/'>Home</Link>
+                    <Link to='/'>Trending</Link>
+                    <Link to='/'>Like</Link>
+                    <Link to='/'>About</Link>
+                    <Link to='/'>
                         <button className='py-2 px-4 rounded-full bg-pink-600 text-white font-bold'>Login😺</button>
-                    </a>
+                    </Link>
                 </div>
             </div>
             {/* web端按钮 */}
             <div className='hidden md:flex items-center gap-8 xl:gap-12 font-medium'>
-                <a href="#">Home</a>
-                <a href="#">Trending</a>
-                <a href="#">Like</a>
-                <a href="#">About</a>
-                <a href="#">
-                    <button className='py-2 px-4 rounded-full bg-pink-600 text-white font-bold'>Login😺</button>
-                </a>
+                <Link to='/'>Home</Link>
+                <Link to='/'>Trending</Link>
+                <Link to='/'>Like</Link>
+                <Link to='/'>About</Link>
+
+                <SignedOut>
+                    <Link to='/login'>
+                        <button className='py-2 px-4 rounded-full bg-pink-600 text-white font-bold'>Login😺</button>
+                    </Link>
+                </SignedOut>
+                <SignedIn>
+                    <UserButton />
+                </SignedIn>
             </div>
         </div>
     );
