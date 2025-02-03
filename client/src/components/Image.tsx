@@ -5,9 +5,9 @@ import { IKImage } from 'imagekitio-react';
 interface ImageProps {
     path: string;
     className: string;
-    width: number;
-    height: number;
-    alt: string;
+    width?: number;
+    height?: number;
+    alt?: string;
 }
 
 const Image: React.FC<ImageProps> = ({ path, className, width, height, alt }) => {
