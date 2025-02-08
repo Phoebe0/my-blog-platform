@@ -20,7 +20,7 @@ const WriteBlogPage = () => {
                 <div className='flex items-center gap-4'>
                     <label htmlFor='' className='text-sm'>请选择标签</label>
                     <select name='cat' id='' className='p-2 rounded-xl bg-white shadow-md'>
-                        <option value='fontend'>前端</option>
+                        <option value='frontend'>前端</option>
                         <option value='backend'>后端</option>
                         <option value='database'>数据</option>
                         <option value='tools'>工具</option>

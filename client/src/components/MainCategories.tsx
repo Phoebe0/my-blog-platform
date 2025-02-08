@@ -6,11 +6,11 @@ const MainCategories = () => {
             {/*链接*/}
             <div className='flex-1 flex items-center justify-between flex-wrap'>
                 <Link to='/posts' className='bg-rose-700 text-white rounded-full px-4 py-2 font-sans'>所有文章</Link>
-                <Link to='/posts?cat=tab-1' className='hover:bg-rose-50  rounded-full px-4 py-2'>前端</Link>
-                <Link to='/posts?cat=tab-2' className='hover:bg-rose-50  rounded-full px-4 py-2'>后端</Link>
-                <Link to='/posts?cat=tab-3' className='hover:bg-rose-50  rounded-full px-4 py-2'>数据</Link>
-                <Link to='/posts?cat=tab-4' className='hover:bg-rose-50  rounded-full px-4 py-2'>工具</Link>
-                <Link to='/posts?cat=tab-5' className='hover:bg-rose-50  rounded-full px-4 py-2'>杂记</Link>
+                <Link to='/posts?cat=frontend' className='hover:bg-rose-50  rounded-full px-4 py-2'>前端</Link>
+                <Link to='/posts?cat=backend' className='hover:bg-rose-50  rounded-full px-4 py-2'>后端</Link>
+                <Link to='/posts?cat=database' className='hover:bg-rose-50  rounded-full px-4 py-2'>数据</Link>
+                <Link to='/posts?cat=tools' className='hover:bg-rose-50  rounded-full px-4 py-2'>工具</Link>
+                <Link to='/posts?cat=other' className='hover:bg-rose-50  rounded-full px-4 py-2'>杂记</Link>
             </div>
             <span className='text-xl font-mono font-medium'>|</span>
             {/*搜索*/}
