@@ -12,7 +12,7 @@ const BlogNav: React.FC = () => {
             {/* logo */}
             {/*使用Link组件，路由导航到根目录下面*/}
             <Link to='/' className='flex items-center gap-2 text-l font-bold font-serif'>
-                <Image path='/MyBlogImgs/logo.png' className='w-10 h-10 rounded-full' width={32} height={32} alt='logo' />
+                <Image path='/MyBlogImgs/logo.png' className='w-10 h-10 rounded-full' w={32} h={32} alt='logo' />
                 <span>Tricia's Blog</span>
             </Link>
             {/* 移动端按钮 */}

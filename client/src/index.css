@@ -14,3 +14,6 @@ body{
 .animateTime {
     animation-duration: 10000ms;
 }
+.ql-container, .ql-editor , .ql-toolbar {
+    border: none !important;
+}

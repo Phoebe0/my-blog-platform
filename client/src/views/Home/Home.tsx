@@ -1,6 +1,7 @@
 import {Link} from "react-router-dom";
 import MainCategories from "../../components/MainCategories.tsx";
 import FeaturedPosts from "../../components/FeaturedPosts.tsx";
+import PostList from "../../components/PostList.tsx";
 
 const Home = () => {
     return (
@@ -64,6 +65,10 @@ const Home = () => {
             {/*特色文章*/}
             <FeaturedPosts/>
             {/*文章列表*/}
+            <div>
+                <h1 className='my-8 text-2xl text-gray-800'>最近</h1>
+                <PostList></PostList>
+            </div>
         </div>
 
     );

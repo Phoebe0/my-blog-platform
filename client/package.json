@@ -11,8 +11,10 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.22.10",
     "imagekitio-react": "^4.2.0",
+    "quill": "^2.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-quilljs": "^2.0.5",
     "react-router-dom": "^6.28.1"
   },
   "devDependencies": {
