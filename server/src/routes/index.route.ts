@@ -1,8 +1,9 @@
-
 import express from 'express';
 import userRouter from './user.route';
 import postRouter from './post.route';
 import commentRouter from './comment.route';
+import webhookRouter from './webhook.route';
 
-const routers:express.Router[] = [userRouter, postRouter,commentRouter];
-export default routers;
+
+// 具名导出
+export {userRouter, postRouter, commentRouter, webhookRouter};

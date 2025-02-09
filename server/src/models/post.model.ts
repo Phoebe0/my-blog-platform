@@ -1,38 +1,38 @@
-import { Schema } from 'mongoose';
-import mongoose from "mongoose";
+import {Schema, model} from 'mongoose';
+import type {IPost} from "../types/index.type";
 
-// 创建一个用户模式
-const postSchema = new Schema({
+// 创建一个文章模型
+const postSchema = new Schema<IPost>({
         // 发布文章时，需要作者信息，所以这里引用了User模型
-    user:{
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-        img:{
+        user: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
+        },
+        img: {
             type: String
         },
-        title:{
+        title: {
             type: String,
             required: true
         },
-        slug:{
+        slug: {
             type: String,
             required: true,
             unique: true
         },
-        desc:{
+        desc: {
             type: String,
         },
-        content:{
+        content: {
             type: String,
             required: true
         },
-        isFeatured:{
+        isFeatured: {
             type: Boolean,
             default: false
         },
-        visit:{
+        visit: {
             type: Number,
             default: 0
         }
@@ -41,4 +41,4 @@ const postSchema = new Schema({
         timestamps: true // 自动添加createdAt和updatedAt字段,记录创建和更新时间
     }
 );
-export default mongoose.model('Post', postSchema); // 创建一个名为User的模型，对应userSchema
+export default model<IPost>('Post', postSchema); // 创建一个名为Post的模型，对应postSchema
