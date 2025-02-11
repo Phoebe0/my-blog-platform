@@ -24,6 +24,10 @@ const postSchema = new Schema<IPost>({
         desc: {
             type: String,
         },
+        category: {
+            type: String,
+            default: ''
+        },
         content: {
             type: String,
             required: true

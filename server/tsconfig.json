@@ -9,6 +9,6 @@
     "skipLibCheck": true, // 跳过库文件的类型检查
     "moduleResolution": "node" // 确保是 nod
   },
-  "include": ["src/**/*"], // 需要编译的文件
+  "include": ["src/**/*", "src/types/**/*"], // 需要编译的文件
   "exclude": ["node_modules"] // 排除的文件
 }

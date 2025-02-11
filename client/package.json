@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.22.10",
+    "@tanstack/react-query": "^5.66.0",
+    "axios": "^1.7.9",
     "imagekitio-react": "^4.2.0",
     "quill": "^2.0.3",
     "react": "^18.3.1",

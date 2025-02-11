@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Image from "./Image.tsx";
 import {Link} from "react-router-dom";
-import {SignedIn, SignedOut, UserButton} from "@clerk/clerk-react";
+import {SignedIn, SignedOut, useAuth, UserButton} from "@clerk/clerk-react";
 
 const BlogNav: React.FC = () => {
     // 下拉菜单状态
     const [open, setOpen] = useState<boolean>(false);
-
+    // 获取用户token-测试
+    const {getToken} = useAuth()
+    useEffect(() => {
+        getToken().then(token => {
+            console.log('token', token)
+        })
+    })
     return (
         <div className='w-full h-16 md:h-20 flex items-center justify-between'>
             {/* logo */}

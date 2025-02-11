@@ -1,16 +1,40 @@
 import {useQuill} from "react-quilljs";
+import React, {useEffect} from "react";
+interface RichTextProps {
+    value: string;
+    setPosts: (value: string) => void;
+}
+const RichText:React.FC<RichTextProps> = ({setPosts}) => {
 
-const RichText = () => {
-    const { quillRef } = useQuill({
+    const {quill, quillRef } = useQuill({
         modules: {
             toolbar: '#toolbar'
         },
         formats: ["size", "bold", "italic", "underline", "strike", "blockquote", "list", "bullet", "indent", "link", "image"],
 
     });
+
+    // useEffect(() => {
+    //     // 确保quill已初始化
+    //     if (quill) {
+    //         // 设置外部传入的内容到Quill编辑器
+    //         quill.root.innerHTML = value; // 使用 innerHTML 设置内容
+    //     }
+    // }, [quill, value]); // 确保quill已初始化并且value变化时执行
+
+    useEffect(() => {
+        if (quill) {
+            // 当编辑器内容变化时，更新外部传递的setPosts
+            quill.on('text-change', () => {
+                const editorContent:string = quill.root.innerHTML;  // 获取编辑器的HTML内容
+                setPosts(editorContent); // 传递编辑器内容
+            });
+        }
+    }, [quill, setPosts]); // 确保quill和setPosts变化时执行
+
     return (
 
-        <div className='mt-4 w-full rounded-xl bg-white h-96'>
+        <div className='mt-4 w-full rounded-xl bg-white h-96' >
             <div id="toolbar">
                 <select className="ql-size">
                     <option value="small"/>
@@ -33,7 +57,6 @@ const RichText = () => {
                 </div>
             </div>
             <div ref={quillRef}/>
-            <button className='bg-rose-800 text-white font-medium rounded-3xl mt-1 p-2 w-36 mb-4'>发布</button>
         </div>
     );
 };
