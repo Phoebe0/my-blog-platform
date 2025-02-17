@@ -15,7 +15,7 @@ interface WebhookEvent {
 export const clerkWebhook = async (req: Request, res: Response): Promise<void> => {
     // 获取 Clerk Webhook 密钥
     const CLERK_WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
-
+    console.log(CLERK_WEBHOOK_SECRET)
     // 如果密钥未设置，则返回服务器错误
     if (!CLERK_WEBHOOK_SECRET) {
         console.error('CLERK_WEBHOOK_SECRET 未设置');
@@ -48,7 +48,7 @@ export const clerkWebhook = async (req: Request, res: Response): Promise<void> =
         res.status(400).json({message: '无效的 Webhook 签名'});
         return
     }
-    console.log('✅ 验证成功，事件数据:', evt);
+
     if (evt.type === 'user.created') {
         const newUser = new UserModel({
             clerkUserId:evt.data?.id,
@@ -57,6 +57,6 @@ export const clerkWebhook = async (req: Request, res: Response): Promise<void> =
             img:evt.data?.profile_img_url
         })
             await newUser.save(); // 保存用户到数据库
+        console.log('✅ 验证成功，事件数据:', newUser);
     }
-
 };

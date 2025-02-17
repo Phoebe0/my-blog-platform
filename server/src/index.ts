@@ -1,7 +1,7 @@
 import express, {Request, Response} from 'express';
 import connectDB from './lib/connectDB';
 import {userRouter, postRouter, commentRouter, webhookRouter} from './routes/index.route'; // 导入路由数组
-import {requireAuth, clerkMiddleware } from '@clerk/express'
+import {requireAuth, clerkMiddleware} from '@clerk/express'
 import cors from 'cors';
 import dotenv from 'dotenv';
 
@@ -36,6 +36,8 @@ app.use((req, res, next) => {
 })*/
 // 连接数据库, 连接成功后再使用路由
 connectDB().then(() => {
+    // 使用webhooks从 Clerk 向服务器回调用户登录信息
+    app.use('/webhooks', webhookRouter); // 为 webhookRouter 添加前缀 /webhooks
 // app.use(cors());
     app.use(cors({
         origin: process.env.CLIENT_URL, // 确保这里是正确的
@@ -44,23 +46,21 @@ connectDB().then(() => {
         optionsSuccessStatus: 204
     }));
 
-    console.log(process.env.CLIENT_URL)
 
     app.use(express.json());
     // 权限校验，检查请求的 cookie 和标头中是否存在会话 JWT
     app.use(clerkMiddleware())
-    // 使用webhooks从 Clerk 向服务器回调用户登录信息
-    app.use('/webhooks', webhookRouter); // 为 webhookRouter 添加前缀 /webhooks
+
 
     // 使用中间件
     // 方法1：用户鉴权,没有登陆状态返回信息Unauthorized。
-    app.get('/protect', (req: Request, res: Response) =>{
-        const {userId} = req.auth|| {};
-        if(!userId){
-            res.status(401).json({message:'Unauthorized'});
+    app.get('/protect', (req: Request, res: Response) => {
+        const {userId} = req.auth || {};
+        if (!userId) {
+            res.status(401).json({message: 'Unauthorized'});
             return;
         }
-        res.status(200).json({message:'Authorized'});
+        res.status(200).json({message: 'Authorized'});
     })
     // 方法2：或者也可以用requireAuth(),未登录直接重定向到登录页面
     /*app.get('/protect2', requireAuth(), (req: Request, res: Response) =>{
@@ -69,10 +69,9 @@ connectDB().then(() => {
     // 允许json格式的请求
 
     // 使用路由
-    app.use('/user', userRouter); // 为 userRouter 添加前缀 /user
     app.use('/posts', postRouter); // 为 postRouter 添加前缀 /posts
+    app.use('/user', userRouter); // 为 userRouter 添加前缀 /user
     app.use('/comment', commentRouter); // 为 commentRouter 添加前缀 /comment
-
 
     // 在现有代码中添加一个故意抛出错误的路由
     app.get('/err', (req: Request, res: Response) => {
@@ -90,7 +89,7 @@ connectDB().then(() => {
         });
     });
 // 监听端口号（注意：两个不同的设备不要端口冲突）
-    app.listen(3031, () => {
+    app.listen(3032, () => {
         console.log('Server is running !');
     });
 

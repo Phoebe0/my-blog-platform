@@ -1,6 +1,10 @@
-import {PostModel,UserModel} from '../models/index.model'
+import {config} from '../config/config';
+import {PostModel, UserModel} from '../models/index.model'
 import {Request, Response} from 'express';
+import ImageKit from 'imagekit'
 
+
+// 获取文章列表
 const getPosts = async (req: Request, res: Response) => {
 
     const posts = await PostModel.find();
@@ -24,8 +28,8 @@ const createPost = async (req: Request, res: Response) => {
     }
     const user = await UserModel.findOne({clerkUserId});
     if (!user) {
-         res.status(401).json({message: '用户不存在'});
-         return;
+        res.status(401).json({message: '用户不存在'});
+        return;
     }
     let slug = req.body.title.replace(/\s+/g, '-').toLowerCase();
     // 检查是否已经存在相同的slug
@@ -37,7 +41,7 @@ const createPost = async (req: Request, res: Response) => {
         counter++;
     }
     // 创建一个新的文章,传递当前用户id和请求体
-    const newPost = new PostModel({user:user._id,slug,...req.body});
+    const newPost = new PostModel({user: user._id, slug, ...req.body});
     // 保存到数据库
     const post = await newPost.save();
     res.status(200).json(post);
@@ -57,17 +61,28 @@ const deletePost = async (req: Request, res: Response) => {
         return;
     }
     // 根据id删除文章
-    const deletePost = await PostModel.findOneAndDelete({_id:req.params.id,user:user._id});
+    const deletePost = await PostModel.findOneAndDelete({_id: req.params.id, user: user._id});
     if (!deletePost) {
         res.status(403).json({message: '你只可以删除自己的文章'});
         return;
     }
     res.status(200).json('文章删除成功！');
 }
-
+// 上传图像
+// 获取imagekit实例
+const imagekit = new ImageKit({
+    urlEndpoint: config.IK_URL_ENDPOINT || '',
+    publicKey: config.IK_PUBLIC_KEY || '',
+    privateKey: config.IK_PRIVATE_KEY || '',
+});
+const uploadAuth = async (req: Request, res: Response) => {
+    const result = imagekit.getAuthenticationParameters();
+    res.send(result);
+}
 export {
     getPosts,
     getPost,
     createPost,
-    deletePost
+    deletePost,
+    uploadAuth
 }

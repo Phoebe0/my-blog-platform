@@ -1,11 +1,11 @@
 // 注册路由
 import SinglePostPage from "../views/PostList/SinglePostPage.tsx";
-import { RouteObject } from "react-router-dom";
+import {RouteObject} from "react-router-dom";
 
-const SinglePostRouter: RouteObject[] =  [
+const SinglePostRouter: RouteObject[] = [
     // 动态路由，将 single 的参数提供给 SinglePostPage 组件。
     {
-        path: "/:single",
+        path: "/post/:single",
         element: <SinglePostPage/>,
     },
 ];

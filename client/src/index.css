@@ -7,13 +7,16 @@
     font-weight: normal;
     font-style: normal;
 }
-body{
+
+body {
     background-color: #f8e0ee;
     font-family: 'Poppins', sans-serif;
 }
+
 .animateTime {
     animation-duration: 10000ms;
 }
-.ql-container, .ql-editor , .ql-toolbar {
+
+.ql-container, .ql-editor, .ql-toolbar {
     border: none !important;
 }
