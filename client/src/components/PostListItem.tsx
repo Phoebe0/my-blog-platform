@@ -1,9 +1,12 @@
 import Image from "./Image.tsx";
 import {Link} from "react-router-dom";
-import {PostData} from "../types/post.types.ts";
+
 import {format} from "timeago.js";
 
+
 const PostListItem = ({post}) => {
+
+
     return (
         <div className='flex flex-col xl:flex-row gap-8 mb-8'>
             {/*image*/}
@@ -13,7 +16,7 @@ const PostListItem = ({post}) => {
             {/*文章列表*/}
             <div className='flex flex-col gap-4 xl:w-2/3'>
                 {/*标题*/}
-                <Link to='/test' className='text-4xl font-semibold'>
+                <Link to={`/post/${post.slug}`} className='text-4xl font-semibold'>
                     {post.title}
                 </Link>
                 {/*副标题*/}

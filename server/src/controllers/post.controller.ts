@@ -9,7 +9,8 @@ const getPosts = async (req: Request, res: Response) => {
     // 分页查询，设置page和limit
     const page: number = parseInt(req.query?.page as string) || 1
     const limit: number = parseInt(req.query?.limit as string) || 2
-    const posts: any[] = await PostModel.find()
+    const posts: any[] = await PostModel
+        .find()
         .populate('user', 'username') // 填充用户信息，populate方法的第一个参数是要填充的字段名，第二个参数是要返回的字段名
         .limit(limit)
         .skip((page - 1) * limit);
@@ -23,7 +24,10 @@ const getPosts = async (req: Request, res: Response) => {
 // 携带参数的请求,单个页面
 const getPost = async (req: Request, res: Response) => {
 
-    const post = await PostModel.findOne({slug: req.params.slug});
+    const post = await PostModel
+        .findOne({slug: req.params.slug})
+        .populate('user', 'username img') // 第二个参数返回两个字段，用户名和图片
+    ;
     res.status(200).json(post);
 
 }

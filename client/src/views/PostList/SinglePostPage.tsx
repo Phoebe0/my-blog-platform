@@ -1,204 +1,56 @@
 import Image from "../../components/Image.tsx";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import PostMenuActions from "../../components/PostMenuActions.tsx";
 import Search from "../../components/Search.tsx";
 import PostComments from "../../components/PostComments.tsx";
+import {useQuery} from "@tanstack/react-query";
+import axios from "axios";
+import {format} from "timeago.js";
+
+const fetchPost = async (slug) => {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/posts/${slug}`)
+    return res.data
+}
 
 const SinglePostPage = () => {
+
+    const {slug} = useParams()
+    const {isPending, error, data} = useQuery({
+        queryKey: ["post", slug], // 查询键
+        queryFn: () => fetchPost(slug)
+    })
+    if (isPending) return <div>Loading...</div>
+    if (error) return <div>Error: {error.message}</div>
+    if (!data) return <div>没找到这篇文章🥹...</div>
     return (
         <div className='flex flex-col gap-8'>
             {/*文章标题*/}
-            <div className='flex gap-8' >
+            <div className='flex gap-8'>
                 <div className='lg:w-3/5 flex flex-col gap-8'>
-                    <h1 className='text-xl md:text-3xl xl:text-4xl 2xl:text-5xl font-semibold'>DeepSeek开源，对标chatGPT o1</h1>
+                    <h1 className='text-xl md:text-3xl xl:text-4xl 2xl:text-5xl font-semibold'>
+                        {data.title}
+                    </h1>
                     <div className='flex items-center gap-2 text-gray-500 text-sm'>
                         <span>作者</span>
-                        <Link to='/' className='text-fuchsia-500'>祟祟平安</Link>
+                        <Link to='/' className='text-fuchsia-500'>{data.user.username}</Link>
                         <span>·</span>
-                        <Link to='/' className='text-rose-400'>前端</Link>
-                        <span>2 天前</span>
+                        <Link to='/' className='text-rose-400'>{data.category}</Link>
+                        <span>{format(data.createdAt)}</span>
                     </div>
                     {/*文章简介*/}
                     <p className='text-gray-500 font-medium'>
-                        随着人工智能技术的迅速发展，越来越多的开源项目涌现，其中不乏一些志向远大，旨在改变行业格局的项目。近期，DeepSeek 的开源发布引发了广泛关注，这个以对标 ChatGPT 为目标的项目，正在为人工智能领域带来新的可能性。本文将深入探讨 DeepSeek 的背景、特点以及其如何在人工智能浪潮中崭露头角，挑战现有的技术巨头。
+                        {data.desc}
                     </p>
                 </div>
-                <div className='hidden lg:block w-2/5'>
-                    <Image path='/MyBlogImgs/singlepost.png' className='rounded-2xl' w={600}/>
-                </div>
+                {data.img && <div className='hidden lg:block w-2/5'>
+                    <Image path={data.img} className='rounded-2xl' w={600}/>
+                </div>}
             </div>
             {/*文章正文 */}
             <div className='flex flex-col md:flex-row gap-8'>
                 {/*文章正文 - 文本*/}
                 <div className='lg:text-lg flex flex-col gap-6 text-justify sm: text-sm md:text-base'>
-                    <p>
-                        DeepSeek 是一个开源的人工智能对话系统，其目标是与市场上领先的对话AI模型，如 ChatGPT 相对抗。与
-                        ChatGPT 的闭源架构不同，DeepSeek 采取了开源策略，旨在为研究者、开发者和技术爱好者提供一个可供深度学习、定制和创新的平台。
-
-                        1.1 开源与共享：技术民主化的力量
-                        开源的核心理念不仅仅是让技术变得可获取，更重要的是推动技术的民主化。通过开源，DeepSeek
-                        使得全球的开发者、学者可以在更透明的环境中进行研究，推动技术的进步。与一些封闭系统相比，开源项目通常能够更快吸引到来自各个领域的贡献者，不仅仅局限于开发团队本身的力量。
-
-                        通过开放源代码，DeepSeek 也避免了许多私有技术的“黑箱”问题，使得用户和开发者能够深入理解和修改背后的模型架构、训练数据以及推理算法，从而更好地为不同的场景进行优化。
-
-                        1.2 对标ChatGPT：追赶与超越
-                        作为一个强大的对话生成模型，ChatGPT 已经在全球范围内获得了巨大的成功。无论是在教育、娱乐，还是在企业服务领域，ChatGPT
-                        都以其卓越的对话能力和深度学习技术，成为了人工智能对话系统的标杆。
-
-                        然而，DeepSeek 的开源发布并非单纯的模仿，它不仅仅是在功能上进行对标，更是在底层架构和可定制性上进行了创新。通过与
-                        ChatGPT 的对比，我们可以发现 DeepSeek 在以下几个方面具备独特的优势：
-
-                        定制化能力：开源使得开发者可以根据自身需求修改模型架构和训练数据，特别是为特定行业和场景量身定制。
-                        透明性：与 ChatGPT 的封闭源代码不同，DeepSeek 提供了更多的透明度，这为用户提供了更多的可操作性和自主权。
-                        社区驱动：得益于开源社区的力量，DeepSeek 有机会快速积累各方贡献，修复bug、优化性能，以及提升模型的多样性和适应性。
-                    </p>
-                    <p>
-                        DeepSeek 是一个开源的人工智能对话系统，其目标是与市场上领先的对话AI模型，如 ChatGPT 相对抗。与
-                        ChatGPT 的闭源架构不同，DeepSeek 采取了开源策略，旨在为研究者、开发者和技术爱好者提供一个可供深度学习、定制和创新的平台。
-
-                        1.1 开源与共享：技术民主化的力量
-                        开源的核心理念不仅仅是让技术变得可获取，更重要的是推动技术的民主化。通过开源，DeepSeek
-                        使得全球的开发者、学者可以在更透明的环境中进行研究，推动技术的进步。与一些封闭系统相比，开源项目通常能够更快吸引到来自各个领域的贡献者，不仅仅局限于开发团队本身的力量。
-
-                        通过开放源代码，DeepSeek 也避免了许多私有技术的“黑箱”问题，使得用户和开发者能够深入理解和修改背后的模型架构、训练数据以及推理算法，从而更好地为不同的场景进行优化。
-
-                        1.2 对标ChatGPT：追赶与超越
-                        作为一个强大的对话生成模型，ChatGPT 已经在全球范围内获得了巨大的成功。无论是在教育、娱乐，还是在企业服务领域，ChatGPT
-                        都以其卓越的对话能力和深度学习技术，成为了人工智能对话系统的标杆。
-
-                        然而，DeepSeek 的开源发布并非单纯的模仿，它不仅仅是在功能上进行对标，更是在底层架构和可定制性上进行了创新。通过与
-                        ChatGPT 的对比，我们可以发现 DeepSeek 在以下几个方面具备独特的优势：
-
-                        定制化能力：开源使得开发者可以根据自身需求修改模型架构和训练数据，特别是为特定行业和场景量身定制。
-                        透明性：与 ChatGPT 的封闭源代码不同，DeepSeek 提供了更多的透明度，这为用户提供了更多的可操作性和自主权。
-                        社区驱动：得益于开源社区的力量，DeepSeek 有机会快速积累各方贡献，修复bug、优化性能，以及提升模型的多样性和适应性。
-                    </p>
-                    <p>
-                        DeepSeek 是一个开源的人工智能对话系统，其目标是与市场上领先的对话AI模型，如 ChatGPT 相对抗。与
-                        ChatGPT 的闭源架构不同，DeepSeek 采取了开源策略，旨在为研究者、开发者和技术爱好者提供一个可供深度学习、定制和创新的平台。
-
-                        1.1 开源与共享：技术民主化的力量
-                        开源的核心理念不仅仅是让技术变得可获取，更重要的是推动技术的民主化。通过开源，DeepSeek
-                        使得全球的开发者、学者可以在更透明的环境中进行研究，推动技术的进步。与一些封闭系统相比，开源项目通常能够更快吸引到来自各个领域的贡献者，不仅仅局限于开发团队本身的力量。
-
-                        通过开放源代码，DeepSeek 也避免了许多私有技术的“黑箱”问题，使得用户和开发者能够深入理解和修改背后的模型架构、训练数据以及推理算法，从而更好地为不同的场景进行优化。
-
-                        1.2 对标ChatGPT：追赶与超越
-                        作为一个强大的对话生成模型，ChatGPT 已经在全球范围内获得了巨大的成功。无论是在教育、娱乐，还是在企业服务领域，ChatGPT
-                        都以其卓越的对话能力和深度学习技术，成为了人工智能对话系统的标杆。
-
-                        然而，DeepSeek 的开源发布并非单纯的模仿，它不仅仅是在功能上进行对标，更是在底层架构和可定制性上进行了创新。通过与
-                        ChatGPT 的对比，我们可以发现 DeepSeek 在以下几个方面具备独特的优势：
-
-                        定制化能力：开源使得开发者可以根据自身需求修改模型架构和训练数据，特别是为特定行业和场景量身定制。
-                        透明性：与 ChatGPT 的封闭源代码不同，DeepSeek 提供了更多的透明度，这为用户提供了更多的可操作性和自主权。
-                        社区驱动：得益于开源社区的力量，DeepSeek 有机会快速积累各方贡献，修复bug、优化性能，以及提升模型的多样性和适应性。
-                    </p>
-                    <p>
-                        DeepSeek 是一个开源的人工智能对话系统，其目标是与市场上领先的对话AI模型，如 ChatGPT 相对抗。与
-                        ChatGPT 的闭源架构不同，DeepSeek 采取了开源策略，旨在为研究者、开发者和技术爱好者提供一个可供深度学习、定制和创新的平台。
-
-                        1.1 开源与共享：技术民主化的力量
-                        开源的核心理念不仅仅是让技术变得可获取，更重要的是推动技术的民主化。通过开源，DeepSeek
-                        使得全球的开发者、学者可以在更透明的环境中进行研究，推动技术的进步。与一些封闭系统相比，开源项目通常能够更快吸引到来自各个领域的贡献者，不仅仅局限于开发团队本身的力量。
-
-                        通过开放源代码，DeepSeek 也避免了许多私有技术的“黑箱”问题，使得用户和开发者能够深入理解和修改背后的模型架构、训练数据以及推理算法，从而更好地为不同的场景进行优化。
-
-                        1.2 对标ChatGPT：追赶与超越
-                        作为一个强大的对话生成模型，ChatGPT 已经在全球范围内获得了巨大的成功。无论是在教育、娱乐，还是在企业服务领域，ChatGPT
-                        都以其卓越的对话能力和深度学习技术，成为了人工智能对话系统的标杆。
-
-                        然而，DeepSeek 的开源发布并非单纯的模仿，它不仅仅是在功能上进行对标，更是在底层架构和可定制性上进行了创新。通过与
-                        ChatGPT 的对比，我们可以发现 DeepSeek 在以下几个方面具备独特的优势：
-
-                        定制化能力：开源使得开发者可以根据自身需求修改模型架构和训练数据，特别是为特定行业和场景量身定制。
-                        透明性：与 ChatGPT 的封闭源代码不同，DeepSeek 提供了更多的透明度，这为用户提供了更多的可操作性和自主权。
-                        社区驱动：得益于开源社区的力量，DeepSeek 有机会快速积累各方贡献，修复bug、优化性能，以及提升模型的多样性和适应性。
-                    </p>
-                    <p>
-                        DeepSeek 是一个开源的人工智能对话系统，其目标是与市场上领先的对话AI模型，如 ChatGPT 相对抗。与
-                        ChatGPT 的闭源架构不同，DeepSeek 采取了开源策略，旨在为研究者、开发者和技术爱好者提供一个可供深度学习、定制和创新的平台。
-
-                        1.1 开源与共享：技术民主化的力量
-                        开源的核心理念不仅仅是让技术变得可获取，更重要的是推动技术的民主化。通过开源，DeepSeek
-                        使得全球的开发者、学者可以在更透明的环境中进行研究，推动技术的进步。与一些封闭系统相比，开源项目通常能够更快吸引到来自各个领域的贡献者，不仅仅局限于开发团队本身的力量。
-
-                        通过开放源代码，DeepSeek 也避免了许多私有技术的“黑箱”问题，使得用户和开发者能够深入理解和修改背后的模型架构、训练数据以及推理算法，从而更好地为不同的场景进行优化。
-
-                        1.2 对标ChatGPT：追赶与超越
-                        作为一个强大的对话生成模型，ChatGPT 已经在全球范围内获得了巨大的成功。无论是在教育、娱乐，还是在企业服务领域，ChatGPT
-                        都以其卓越的对话能力和深度学习技术，成为了人工智能对话系统的标杆。
-
-                        然而，DeepSeek 的开源发布并非单纯的模仿，它不仅仅是在功能上进行对标，更是在底层架构和可定制性上进行了创新。通过与
-                        ChatGPT 的对比，我们可以发现 DeepSeek 在以下几个方面具备独特的优势：
-
-                        定制化能力：开源使得开发者可以根据自身需求修改模型架构和训练数据，特别是为特定行业和场景量身定制。
-                        透明性：与 ChatGPT 的封闭源代码不同，DeepSeek 提供了更多的透明度，这为用户提供了更多的可操作性和自主权。
-                        社区驱动：得益于开源社区的力量，DeepSeek 有机会快速积累各方贡献，修复bug、优化性能，以及提升模型的多样性和适应性。
-                    </p>
-                    <p>
-                        DeepSeek 是一个开源的人工智能对话系统，其目标是与市场上领先的对话AI模型，如 ChatGPT 相对抗。与
-                        ChatGPT 的闭源架构不同，DeepSeek 采取了开源策略，旨在为研究者、开发者和技术爱好者提供一个可供深度学习、定制和创新的平台。
-
-                        1.1 开源与共享：技术民主化的力量
-                        开源的核心理念不仅仅是让技术变得可获取，更重要的是推动技术的民主化。通过开源，DeepSeek
-                        使得全球的开发者、学者可以在更透明的环境中进行研究，推动技术的进步。与一些封闭系统相比，开源项目通常能够更快吸引到来自各个领域的贡献者，不仅仅局限于开发团队本身的力量。
-
-                        通过开放源代码，DeepSeek 也避免了许多私有技术的“黑箱”问题，使得用户和开发者能够深入理解和修改背后的模型架构、训练数据以及推理算法，从而更好地为不同的场景进行优化。
-
-                        1.2 对标ChatGPT：追赶与超越
-                        作为一个强大的对话生成模型，ChatGPT 已经在全球范围内获得了巨大的成功。无论是在教育、娱乐，还是在企业服务领域，ChatGPT
-                        都以其卓越的对话能力和深度学习技术，成为了人工智能对话系统的标杆。
-
-                        然而，DeepSeek 的开源发布并非单纯的模仿，它不仅仅是在功能上进行对标，更是在底层架构和可定制性上进行了创新。通过与
-                        ChatGPT 的对比，我们可以发现 DeepSeek 在以下几个方面具备独特的优势：
-
-                        定制化能力：开源使得开发者可以根据自身需求修改模型架构和训练数据，特别是为特定行业和场景量身定制。
-                        透明性：与 ChatGPT 的封闭源代码不同，DeepSeek 提供了更多的透明度，这为用户提供了更多的可操作性和自主权。
-                        社区驱动：得益于开源社区的力量，DeepSeek 有机会快速积累各方贡献，修复bug、优化性能，以及提升模型的多样性和适应性。
-                    </p>
-                    <p>
-                        DeepSeek 是一个开源的人工智能对话系统，其目标是与市场上领先的对话AI模型，如 ChatGPT 相对抗。与
-                        ChatGPT 的闭源架构不同，DeepSeek 采取了开源策略，旨在为研究者、开发者和技术爱好者提供一个可供深度学习、定制和创新的平台。
-
-                        1.1 开源与共享：技术民主化的力量
-                        开源的核心理念不仅仅是让技术变得可获取，更重要的是推动技术的民主化。通过开源，DeepSeek
-                        使得全球的开发者、学者可以在更透明的环境中进行研究，推动技术的进步。与一些封闭系统相比，开源项目通常能够更快吸引到来自各个领域的贡献者，不仅仅局限于开发团队本身的力量。
-
-                        通过开放源代码，DeepSeek 也避免了许多私有技术的“黑箱”问题，使得用户和开发者能够深入理解和修改背后的模型架构、训练数据以及推理算法，从而更好地为不同的场景进行优化。
-
-                        1.2 对标ChatGPT：追赶与超越
-                        作为一个强大的对话生成模型，ChatGPT 已经在全球范围内获得了巨大的成功。无论是在教育、娱乐，还是在企业服务领域，ChatGPT
-                        都以其卓越的对话能力和深度学习技术，成为了人工智能对话系统的标杆。
-
-                        然而，DeepSeek 的开源发布并非单纯的模仿，它不仅仅是在功能上进行对标，更是在底层架构和可定制性上进行了创新。通过与
-                        ChatGPT 的对比，我们可以发现 DeepSeek 在以下几个方面具备独特的优势：
-
-                        定制化能力：开源使得开发者可以根据自身需求修改模型架构和训练数据，特别是为特定行业和场景量身定制。
-                        透明性：与 ChatGPT 的封闭源代码不同，DeepSeek 提供了更多的透明度，这为用户提供了更多的可操作性和自主权。
-                        社区驱动：得益于开源社区的力量，DeepSeek 有机会快速积累各方贡献，修复bug、优化性能，以及提升模型的多样性和适应性。
-                    </p>
-                    <p>
-                        DeepSeek 是一个开源的人工智能对话系统，其目标是与市场上领先的对话AI模型，如 ChatGPT 相对抗。与
-                        ChatGPT 的闭源架构不同，DeepSeek 采取了开源策略，旨在为研究者、开发者和技术爱好者提供一个可供深度学习、定制和创新的平台。
-
-                        1.1 开源与共享：技术民主化的力量
-                        开源的核心理念不仅仅是让技术变得可获取，更重要的是推动技术的民主化。通过开源，DeepSeek
-                        使得全球的开发者、学者可以在更透明的环境中进行研究，推动技术的进步。与一些封闭系统相比，开源项目通常能够更快吸引到来自各个领域的贡献者，不仅仅局限于开发团队本身的力量。
-
-                        通过开放源代码，DeepSeek 也避免了许多私有技术的“黑箱”问题，使得用户和开发者能够深入理解和修改背后的模型架构、训练数据以及推理算法，从而更好地为不同的场景进行优化。
-
-                        1.2 对标ChatGPT：追赶与超越
-                        作为一个强大的对话生成模型，ChatGPT 已经在全球范围内获得了巨大的成功。无论是在教育、娱乐，还是在企业服务领域，ChatGPT
-                        都以其卓越的对话能力和深度学习技术，成为了人工智能对话系统的标杆。
-
-                        然而，DeepSeek 的开源发布并非单纯的模仿，它不仅仅是在功能上进行对标，更是在底层架构和可定制性上进行了创新。通过与
-                        ChatGPT 的对比，我们可以发现 DeepSeek 在以下几个方面具备独特的优势：
-
-                        定制化能力：开源使得开发者可以根据自身需求修改模型架构和训练数据，特别是为特定行业和场景量身定制。
-                        透明性：与 ChatGPT 的封闭源代码不同，DeepSeek 提供了更多的透明度，这为用户提供了更多的可操作性和自主权。
-                        社区驱动：得益于开源社区的力量，DeepSeek 有机会快速积累各方贡献，修复bug、优化性能，以及提升模型的多样性和适应性。
-                    </p>
+                    <div dangerouslySetInnerHTML={{__html: data.content}}/>
                 </div>
                 {/*侧边栏*/}
                 <div className='px-4 h-max sticky top-8'>
@@ -207,9 +59,14 @@ const SinglePostPage = () => {
                     <div className='flex flex-col gap-4 '>
                         {/*用户个人信息：头像 + 昵称 + 个签*/}
                         <div className='flex items-center gap-8'>
-                            <Image path='/MyBlogImgs/user_avatar' className='w-12 h-12 rounded-full object-cover' w={48}
-                                   h={48}></Image>
-                            <Link to='/' className='text-rose-800'>祟祟平安</Link>
+                            {data.user.img && <Image path={data.user.img}
+                                                     className='w-12 h-12 rounded-full object-cover'
+                                                     w={48}
+                                                     h={48}>
+
+                            </Image>
+                            }
+                            <Link to='/' className='text-rose-800'>{data.user.username}</Link>
                         </div>
                         <p className='text-sm text-gray-600'>岁岁平安</p>
                         {/*第三方账号*/}
@@ -234,10 +91,10 @@ const SinglePostPage = () => {
                         <Link to='' className='underline'>工具</Link>
                     </div>
                     <h1 className='mt-8 mb-4 text-sm font-medium'>搜索</h1>
-                    <Search />
+                    <Search/>
                 </div>
             </div>
-<PostComments/>
+            <PostComments/>
 
         </div>
     );
