@@ -22,6 +22,7 @@ const WriteBlogPage = () => {
     const [img, setImg] = useState<any>('');
     const [video, setVideo] = useState<any>('');
     const [progress, setProgress] = useState<number>(0);
+    console.log(cover)
     useEffect(() => {
         // 图片发生变化时执行
         console.log(img.url)
@@ -68,6 +69,7 @@ const WriteBlogPage = () => {
         e.preventDefault(); // 阻止表单默认提交行为
         const formData = new FormData(e.currentTarget);
         const data: PostData = {
+            img: cover?.filePath || '',
             title: formData.get("title"),
             desc: formData.get("desc"),
             category: formData.get("category"),

@@ -6,9 +6,18 @@ import ImageKit from 'imagekit'
 
 // 获取文章列表
 const getPosts = async (req: Request, res: Response) => {
-
-    const posts = await PostModel.find();
-    res.status(200).json(posts);
+    // 分页查询，设置page和limit
+    const page: number = parseInt(req.query?.page as string) || 1
+    const limit: number = parseInt(req.query?.limit as string) || 2
+    const posts: any[] = await PostModel.find()
+        .populate('user', 'username') // 填充用户信息，populate方法的第一个参数是要填充的字段名，第二个参数是要返回的字段名
+        .limit(limit)
+        .skip((page - 1) * limit);
+    // 获取文章总数
+    const totalPosts: number = await PostModel.countDocuments()
+    // 是否还有更多文章
+    const hasMore: boolean = page * limit < totalPosts
+    res.status(200).json({posts, hasMore});
 
 }
 // 携带参数的请求,单个页面
