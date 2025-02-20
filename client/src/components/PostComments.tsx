@@ -7,6 +7,7 @@ import type {Comment} from '../types/comment.d.ts'
 import type {PostData} from "../types/post.d.ts";
 
 import type {FormSubmitEvent} from '../types/common.d.ts'
+import {useRef} from "react";
 
 const fetchComments = async (postId) => {
     const res = await axios.get(`${import.meta.env.VITE_API_URL}/comments/${postId}`)
@@ -58,6 +59,7 @@ const PostComments = ({postId}) => {
             toast.error(error.reponse.data)
         }
     })
+    const textareaRef = useRef<HTMLTextAreaElement>(null); // 创建一个 ref 来引用 textarea
 
     const handleCommentSubmit = (e: FormSubmitEvent) => {
         e.preventDefault() // 阻止表单默认提交行为
@@ -68,12 +70,21 @@ const PostComments = ({postId}) => {
             post: postId
         }
         mutation.mutate(data)
+        // 清空输入框
+        if (textareaRef.current) {
+            textareaRef.current.value = '';
+        }
     }
     return (
         <div className='flex flex-col gap-8 lg:w-3/5 mb-12'>
             <h1 className='text-xl text-gray-600 underline'>评论</h1>
             <form onSubmit={handleCommentSubmit} className='flex items-center justify-between gap-8 w-full'>
-                <textarea name='desc' placeholder='友好评论' className='w-full p-4 rounded-2xl'></textarea>
+                <textarea ref={textareaRef}
+                          name='desc'
+                          placeholder='友好评论'
+                          className='w-full p-4 rounded-2xl'>
+
+                </textarea>
                 <button className='bg-pink-800 px-4 py-2 text-white font-medium rounded-full'>发表
                 </button>
             </form>
@@ -94,7 +105,7 @@ const PostComments = ({postId}) => {
                     {/*}*/}
                     {data.map(comment => (
 
-                        <PostComment key={comment._id} comment={comment}/>
+                        <PostComment key={comment._id} comment={comment} postId={postId}/>
                     ))}
                 </>
             }

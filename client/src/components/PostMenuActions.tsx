@@ -102,6 +102,7 @@ const PostMenuActions = ({post}) => {
                     </svg>
                     <span>收藏</span>
                 </div>)}
+
             {/*如果是当前文章的作者 或 admin 用户，则可以删除*/}
             {user && (post.user.username === user?.username || isAdmin) && (
                 <div className='flex items-center gap-2 py-2 text-sm cursor-pointer' onClick={handleDelete}>
