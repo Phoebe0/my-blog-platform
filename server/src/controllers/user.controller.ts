@@ -5,17 +5,24 @@ const getUserSavedPosts = async (req: Request, res: Response) => {
     // 先鉴权
     const clerkUserId = req.auth?.userId
     if (!clerkUserId) {
-        res.status(401).json("Unauthorized")
+        res.status(401).json("认证失败")
+        return
     }
-    const user = await UserModel.findOne({clerkUserId})
-    res.status(200).json(user.savedPosts)
+    const user: any = await UserModel.findOne({clerkUserId})
+
+    // 检查 user 是否存在
+    if (!user) {
+        res.status(404).json({message: "用户不存在"});
+        return
+    }
+    res.status(200).json(user.savedPosts || [])
 }
 const savePost = async (req: Request, res: Response) => {
     // 先鉴权
     const clerkUserId = req.auth?.userId
     const postId = req.body.postId
     if (!clerkUserId) {
-        res.status(401).json({message: "Unauthorized"})
+        res.status(401).json({message: "认证失败"})
     }
     const user = await UserModel.findOne({clerkUserId})
     // 判断是否收藏了

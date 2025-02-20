@@ -27,7 +27,7 @@ const getPost = async (req: Request, res: Response) => {
     const post = await PostModel
         .findOne({slug: req.params.slug})
         .populate('user', 'username img') // 第二个参数返回两个字段，用户名和图片
-    ;
+    console.log(post)
     res.status(200).json(post);
 
 }
@@ -36,7 +36,7 @@ const createPost = async (req: Request, res: Response) => {
 // 创建文章之前首先校验用户是否登录
     const clerkUserId = req.auth?.userId;
     if (!clerkUserId) {
-        res.status(401).json({message: 'Unauthorized'});
+        res.status(401).json({message: '认证失败'});
         return;
     }
     const user = await UserModel.findOne({clerkUserId});
@@ -63,12 +63,19 @@ const createPost = async (req: Request, res: Response) => {
 // 删除文章
 const deletePost = async (req: Request, res: Response) => {
 // 删除文章之前首先校验用户是否登录
-    const clerkUserId = req.auth?.userId;
+    const clerkUserId: string | undefined = req.auth?.userId;
     if (!clerkUserId) {
-        res.status(401).json({message: 'Unauthorized'});
+        res.status(401).json({message: '认证失败'});
         return;
     }
-    const user = await UserModel.findOne({clerkUserId});
+    // 校验角色，如果是管理员也可以删除任何文章
+    const role: string = req.auth?.sessionClaims?.metadata?.role || 'user'
+    if (role === 'admin') {
+        await PostModel.findByIdAndDelete(req.params.id)
+        res.status(200).json('文章删除成功！');
+        return
+    }
+    const user: any = await UserModel.findOne({clerkUserId});
     if (!user) {
         res.status(401).json({message: '用户不存在'});
         return;

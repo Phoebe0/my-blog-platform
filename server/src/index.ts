@@ -11,6 +11,7 @@ dotenv.config(); // 加载 .env 文件中的环境变量
 declare module 'express' {
     interface Request {
         auth?: {
+            sessionClaims: any;
             userId?: string;
         };
     }
@@ -37,8 +38,8 @@ app.use((req, res, next) => {
 // 连接数据库, 连接成功后再使用路由
 connectDB().then(() => {
     // 使用webhooks从 Clerk 向服务器回调用户登录信息
+    // 注意：一定要写在最前面
     app.use('/webhooks', webhookRouter); // 为 webhookRouter 添加前缀 /webhooks
-// app.use(cors());
     app.use(cors({
         origin: process.env.CLIENT_URL, // 确保这里是正确的
         allowedHeaders: ['Content-Type', 'Authorization'],
@@ -46,8 +47,8 @@ connectDB().then(() => {
         optionsSuccessStatus: 204
     }));
 
-
     app.use(express.json());
+
     // 权限校验，检查请求的 cookie 和标头中是否存在会话 JWT
     app.use(clerkMiddleware())
 
@@ -89,7 +90,7 @@ connectDB().then(() => {
         });
     });
 // 监听端口号（注意：两个不同的设备不要端口冲突）
-    app.listen(3032, () => {
+    app.listen(3038, () => {
         console.log('Server is running !');
     });
 

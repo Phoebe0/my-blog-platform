@@ -22,12 +22,10 @@ const SinglePostPage = () => {
         queryKey: ["post", slug], // 查询键
         queryFn: () => fetchPost(slug)
     })
+    console.log(data)
     if (isPending) return <div>Loading...</div>
     if (error) return <div>Error: {error.message}</div>
     if (!data) return <div>没找到这篇文章🥹...</div>
-    // // 判断 content 是否为 HTML 或 Markdown
-    // const isMarkdown = data.content && data.content.startsWith("#");  // 例如 Markdown 以 "#" 开头
-    // const content = isMarkdown ? marked(data.content) : data.content;
     return (
         <div className='flex flex-col gap-8'>
             {/*文章标题*/}
@@ -38,7 +36,7 @@ const SinglePostPage = () => {
                     </h1>
                     <div className='flex items-center gap-2 text-gray-500 text-sm'>
                         <span>作者</span>
-                        <Link to='/' className='text-fuchsia-500'>{data.user.username}</Link>
+                        <Link to='/' className='text-fuchsia-500'>{data.user?.username}</Link>
                         <span>·</span>
                         <Link to='/' className='text-rose-400'>{data.category}</Link>
                         <span>{format(data.createdAt)}</span>

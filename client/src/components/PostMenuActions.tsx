@@ -76,6 +76,8 @@ const PostMenuActions = ({post}) => {
         }
         savePost.mutate()
     }
+    // 判断当前登录用户是否为admin
+    const isAdmin: boolean = user?.publicMetadata.role === 'admin' || false
     // 判断是否收藏了
     const isSaved: boolean = savedPosts?.data?.some((p: string) => p === post._id) || false
 
@@ -100,7 +102,8 @@ const PostMenuActions = ({post}) => {
                     </svg>
                     <span>收藏</span>
                 </div>)}
-            {user && (post.user.username === user?.username) && (
+            {/*如果是当前文章的作者 或 admin 用户，则可以删除*/}
+            {user && (post.user.username === user?.username || isAdmin) && (
                 <div className='flex items-center gap-2 py-2 text-sm cursor-pointer' onClick={handleDelete}>
                     <svg
                         width="20"

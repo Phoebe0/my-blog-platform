@@ -45,6 +45,13 @@ const deletePostComment = async (req: Request, res: Response) => {
     if (!clerkUserId) {
         res.status(401).json('认证失败');
     }
+    // 校验角色，如果是管理员也可以删除任何评论
+    const role: string = req.auth?.sessionClaims?.metadata?.role || 'user'
+    if (role === 'admin') {
+        await CommentModel.findByIdAndDelete(req.params.id)
+        res.status(200).json('评论删除成功！');
+        return
+    }
     const user = await UserModel.findOne({clerkUserId});
     // 删除评论
     const deletedComment = await CommentModel.findByIdAndDelete({

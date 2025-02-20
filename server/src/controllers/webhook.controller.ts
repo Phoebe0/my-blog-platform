@@ -1,5 +1,5 @@
 import {Request, Response} from 'express'; // 导入 Express 的 Request 和 Response 类型
-import {UserModel} from '../models/index.model'; // 导入 UserModel 模型
+import {CommentModel, PostModel, UserModel} from '../models/index.model'; // 导入 UserModel 模型
 import {Webhook} from 'svix'; // 从 svix 库导入 Webhook 以用于 Clerk Webhook 处理
 import dotenv from 'dotenv'; // 导入 dotenv 用于加载环境变量
 
@@ -13,6 +13,7 @@ interface WebhookEvent {
 
 // Clerk Webhook 处理函数
 export const clerkWebhook = async (req: Request, res: Response): Promise<void> => {
+
     // 获取 Clerk Webhook 密钥
     const CLERK_WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
     console.log(CLERK_WEBHOOK_SECRET)
@@ -42,21 +43,31 @@ export const clerkWebhook = async (req: Request, res: Response): Promise<void> =
 
         // 验证 Webhook 签名，确保请求来自 Clerk
         evt = wh.verify(payload, requiredHeaders) as WebhookEvent;
-
+        console.log(evt)
     } catch (err) {
         console.error('Webhook 验证失败:', err);
         res.status(400).json({message: '无效的 Webhook 签名'});
         return
     }
-
     if (evt.type === 'user.created') {
+        // 处理用户创建事件
         const newUser = new UserModel({
-            clerkUserId:evt.data?.id,
-            username:evt.data?.username || evt.data?.email_addresses[0].email_address,
-            email:evt.data?.email_addresses[0].email_address,
-            img:evt.data?.profile_img_url
+            clerkUserId: evt.data?.id,
+            username: evt.data?.username || evt.data?.email_addresses[0].email_address,
+            email: evt.data?.email_addresses[0].email_address,
+            img: evt.data?.profile_image_url
         })
-            await newUser.save(); // 保存用户到数据库
+        await newUser.save(); // 保存用户到数据库
         console.log('✅ 验证成功，事件数据:', newUser);
     }
+    if (evt.type === "user.deleted") {
+        // 处理用户删除事件
+        const deletedUser = await UserModel.findOneAndDelete({
+            clerkUserId: evt.data?.id,
+        });
+
+        await PostModel.deleteMany({user: deletedUser._id})
+        await CommentModel.deleteMany({user: deletedUser._id})
+    }
+
 };
