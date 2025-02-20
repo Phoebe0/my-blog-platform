@@ -25,7 +25,7 @@ const PostComments = ({postId}) => {
     })
     const mutation = useMutation({
         mutationFn: async (newComment: PostData) => {
-            // 新增文章之前需要做鉴权
+            // 新增评论之前需要做鉴权
             const token: string = await getToken() || ''
             return axios.post(`${import.meta.env.VITE_API_URL}/comments/${postId}`, newComment, {
                 headers: {
@@ -39,8 +39,9 @@ const PostComments = ({postId}) => {
 
             // 直接为评论列表添加新的评论（模拟成功提交）
             queryClient.setQueryData(["comments", postId], (old) => [
+
+                {...newComment, createdAt: new Date(), _id: Math.random().toString()}, // 模拟新的评论 ID
                 ...old,
-                {...newComment, createdAt: new Date(), _id: Math.random().toString()} // 模拟新的评论 ID
             ]);
 
             // 返回一个回滚函数，用于错误时恢复数据
@@ -79,18 +80,18 @@ const PostComments = ({postId}) => {
 
             {isPending ? "评论加载中..." : error ? "阿偶，评论加载出了点问题..." :
                 <>
-                    {
-                        mutation.isPending && (
-                            <PostComment comment={{
-                                desc: `${mutation.variables.desc}(评论中... )`,
-                                createdAt: new Date(),
-                                user: {
-                                    img: user?.imageUrl || 'https://ik.imagekit.io/Tricia/MyBlogImgs/user_avatar?updatedAt=1738817973222',
-                                    username: user?.username || '默认'
-                                }
-                            }}/>
-                        )
-                    }
+                    {/*{*/}
+                    {/*    mutation.isPending && (*/}
+                    {/*        <PostComment comment={{*/}
+                    {/*            desc: `${mutation.variables.desc}(评论中... )`,*/}
+                    {/*            createdAt: new Date(),*/}
+                    {/*            user: {*/}
+                    {/*                img: user?.imageUrl || 'https://ik.imagekit.io/Tricia/MyBlogImgs/user_avatar?updatedAt=1738817973222',*/}
+                    {/*                username: user?.username || '默认'*/}
+                    {/*            }*/}
+                    {/*        }}/>*/}
+                    {/*    )*/}
+                    {/*}*/}
                     {data.map(comment => (
 
                         <PostComment key={comment._id} comment={comment}/>

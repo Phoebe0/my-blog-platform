@@ -4,6 +4,6 @@ import {getUserSavedPosts, savePost} from '../controllers/user.controller';
 const router = express.Router();
 
 router.get('/saved', getUserSavedPosts)
-router.patch('save', savePost)
+router.post('/save', savePost)
 
 export default router;

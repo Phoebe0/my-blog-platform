@@ -70,7 +70,7 @@ connectDB().then(() => {
 
     // 使用路由
     app.use('/posts', postRouter); // 为 postRouter 添加前缀 /posts
-    app.use('/user', userRouter); // 为 userRouter 添加前缀 /user
+    app.use('/users', userRouter); // 为 userRouter 添加前缀 /user
     app.use('/comments', commentRouter); // 为 commentRouter 添加前缀 /comment
 
     // 在现有代码中添加一个故意抛出错误的路由
