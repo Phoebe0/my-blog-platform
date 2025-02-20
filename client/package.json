@@ -10,16 +10,20 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.22.10",
+    "@tailwindcss/typography": "^0.5.16",
     "@tanstack/react-query": "^5.66.0",
     "axios": "^1.7.9",
     "imagekitio-react": "^4.2.0",
+    "marked": "^15.0.7",
     "quill": "^2.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-markdown": "^9.0.3",
     "react-quilljs": "^2.0.5",
     "react-router-dom": "^6.28.1",
     "react-toastify": "^11.0.3",
+    "rehype-raw": "^7.0.0",
     "timeago.js": "^4.0.2"
   },
   "devDependencies": {

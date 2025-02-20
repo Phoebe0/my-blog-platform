@@ -29,8 +29,7 @@ export interface UploadError {
     stack?: string
 }
 
-// 表单提交事件类型
-export type FormSubmitEvent = React.FormEvent<HTMLFormElement>;
+
 // 文章类型
 // 定义文章类型
 export interface Post {

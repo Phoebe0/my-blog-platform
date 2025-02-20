@@ -1,5 +1,5 @@
 import {toast} from "react-toastify";
-import {AuthenticatorResponse, UploadSuccessResponse} from "../types/post.types.ts";
+import {AuthenticatorResponse, UploadSuccessResponse} from "../types/post.d.ts";
 import {IKContext, IKUpload} from "imagekitio-react";
 import React, {useRef} from "react";
 

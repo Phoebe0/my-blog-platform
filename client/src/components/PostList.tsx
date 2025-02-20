@@ -4,7 +4,7 @@ import {
 } from '@tanstack/react-query'
 import axios from 'axios';
 import InfiniteScroll from "react-infinite-scroll-component";
-import {PostsResponse, InfiniteQueryResult, Post} from "../types/post.types.ts";
+import {PostsResponse, InfiniteQueryResult, Post} from "../types/post.d.ts";
 
 // 定义一个函数，用于获取数据
 const fetchPosts = async (pageParam: number): Promise<PostsResponse> => {

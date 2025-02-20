@@ -6,6 +6,9 @@ import PostComments from "../../components/PostComments.tsx";
 import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
 import {format} from "timeago.js";
+import rehypeRaw from 'rehype-raw';
+// import {marked} from 'marked';
+import ReactMarkdown from 'react-markdown';
 
 const fetchPost = async (slug) => {
     const res = await axios.get(`${import.meta.env.VITE_API_URL}/posts/${slug}`)
@@ -22,6 +25,9 @@ const SinglePostPage = () => {
     if (isPending) return <div>Loading...</div>
     if (error) return <div>Error: {error.message}</div>
     if (!data) return <div>没找到这篇文章🥹...</div>
+    // // 判断 content 是否为 HTML 或 Markdown
+    // const isMarkdown = data.content && data.content.startsWith("#");  // 例如 Markdown 以 "#" 开头
+    // const content = isMarkdown ? marked(data.content) : data.content;
     return (
         <div className='flex flex-col gap-8'>
             {/*文章标题*/}
@@ -50,7 +56,12 @@ const SinglePostPage = () => {
             <div className='flex flex-col md:flex-row gap-8'>
                 {/*文章正文 - 文本*/}
                 <div className='lg:text-lg flex flex-col gap-6 text-justify sm: text-sm md:text-base'>
-                    <div dangerouslySetInnerHTML={{__html: data.content}}/>
+                    <ReactMarkdown
+                        children={data.content}
+                        rehypePlugins={[rehypeRaw]}  // 启用 rehype-raw 插件解析 HTML
+                        className="prose lg:prose-xl"  // 使用 Tailwind 的 prose 类,prose 类会为 Markdown 渲染的 HTML 元素（如标题、段落、链接等）提供漂亮的默认样式，并且不会被 Tailwind 的其他类覆盖
+
+                    />
                 </div>
                 {/*侧边栏*/}
                 <div className='px-4 h-max sticky top-8'>
@@ -80,7 +91,7 @@ const SinglePostPage = () => {
                         </div>
                     </div>
                     {/*操作*/}
-                    <PostMenuActions/>
+                    <PostMenuActions post={data}/>
                     {/*目录*/}
                     <h1 className='mt-8 mb-4 text-sm font-medium'>目录</h1>
                     <div className='flex flex-col gap-2 text-sm'>
@@ -94,7 +105,7 @@ const SinglePostPage = () => {
                     <Search/>
                 </div>
             </div>
-            <PostComments/>
+            <PostComments postId={data._id}/>
 
         </div>
     );

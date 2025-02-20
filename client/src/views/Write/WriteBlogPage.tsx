@@ -8,10 +8,8 @@ import {useNavigate} from "react-router-dom";
 import {toast} from 'react-toastify';
 import Upload from "../../components/Upload.tsx";
 
-import {
-    PostData,
-    FormSubmitEvent,
-} from '../../types/post.types.ts'
+import type {PostData} from '../../types/post.d.ts'
+import type {FormSubmitEvent} from '../../types/common.d.ts'
 
 
 const WriteBlogPage = () => {
