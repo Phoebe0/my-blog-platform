@@ -4,19 +4,27 @@ import {
 } from '@tanstack/react-query'
 import axios from 'axios';
 import InfiniteScroll from "react-infinite-scroll-component";
-import {PostsResponse, InfiniteQueryResult, Post} from "../types/post.d.ts";
+import type {PostsResponse, InfiniteQueryResult, Post} from "../types/post.d.ts";
+import {useSearchParams} from "react-router-dom";
 
 // 定义一个函数，用于获取数据
-const fetchPosts = async (pageParam: number): Promise<PostsResponse> => {
+const fetchPosts = async (pageParam: number, searchParams: any): Promise<PostsResponse> => {
+    // 使用Object.fromEntries将searchParams转换为对象
+    const searchParamsObj = Object.fromEntries([...searchParams])
+    console.log(searchParamsObj)
     const res = await axios.get(`${import.meta.env.VITE_API_URL}/posts`, {
         params: {
             page: pageParam,
-            limit: 2
+            limit: 10,
+            ...searchParamsObj
         }
     })
     return res.data
 }
 const PostList = () => {
+    // 使用 useSearchParams 钩子来获取 URL 查询参数
+    const [searchParams, setSearchParams] = useSearchParams()
+
     // 使用 useInfiniteQuery 钩子来获取数据，进行分页查询
     const {
         data,
@@ -24,8 +32,8 @@ const PostList = () => {
         hasNextPage,
         status,
     } = useInfiniteQuery<PostsResponse, InfiniteQueryResult>({
-        queryKey: ['posts'],
-        queryFn: ({pageParam = 1}) => fetchPosts(pageParam),
+        queryKey: ['posts', searchParams.toString()],
+        queryFn: ({pageParam = 1}) => fetchPosts(pageParam, searchParams),
         initialPageParam: 1, // 初始页码
         getNextPageParam: (lastPage, pages) => lastPage.hasMore ? pages.length + 1 : undefined,
     })

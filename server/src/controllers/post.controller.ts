@@ -2,16 +2,72 @@ import {config} from '../config/config';
 import {PostModel, UserModel} from '../models/index.model'
 import {Request, Response} from 'express';
 import ImageKit from 'imagekit'
-
+import {PostQuery, SortObj} from "../types/post.type";
 
 // 获取文章列表
 const getPosts = async (req: Request, res: Response) => {
     // 分页查询，设置page和limit
     const page: number = parseInt(req.query?.page as string) || 1
     const limit: number = parseInt(req.query?.limit as string) || 2
+    // 查询参数
+    const query: PostQuery = {}
+    // 分类查询
+    const cat: any = req.query?.cat
+    const author: any = req.query?.author
+    const searchQuery: any = req.query?.search
+    const sortQuery: any = req.query?.sort
+    const featured: any = req.query?.featured
+    if (cat) {
+        query.category = cat;
+    }
+
+    if (searchQuery) {
+        query.title = {$regex: searchQuery, $options: "i"};
+    }
+
+    if (author) {
+        const user = await UserModel.findOne({username: author}).select("_id");
+        console.log(user);
+        if (!user) {
+            res.status(404).json("文章失踪了")
+            return
+        }
+
+        query.user = user._id;
+
+    }
+
+    let sortObj: SortObj = {createdAt: -1};
+    // 筛选框参数
+    if (sortQuery) {
+        switch (sortQuery) {
+            case "latest":
+                sortObj = {createdAt: -1};
+                break;
+            case "oldest":
+                sortObj = {createdAt: 1};
+                break;
+            case "popular":
+                sortObj = {visit: -1};
+                break;
+            case "trending":
+                sortObj = {visit: 1};
+                query.createdAt = {
+                    $gte: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000),
+                };
+                break;
+            default:
+                break;
+        }
+    }
+
+    if (featured) {
+        query.isFeatured = true;
+    }
     const posts: any[] = await PostModel
-        .find()
+        .find(query)
         .populate('user', 'username') // 填充用户信息，populate方法的第一个参数是要填充的字段名，第二个参数是要返回的字段名
+        .sort(sortObj)
         .limit(limit)
         .skip((page - 1) * limit);
     // 获取文章总数
@@ -112,7 +168,7 @@ const featuredPost = async (req: Request, res: Response) => {
         return
     }
     // 检查当前文章是否已经被推荐
-    const isFeatured: boolean = post.isFeatured;
+    const isFeatured: boolean | undefined = post.isFeatured;
     // 更新文章状态
     const updatedPost = await PostModel.findByIdAndUpdate(
         postId,

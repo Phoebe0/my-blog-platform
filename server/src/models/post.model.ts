@@ -1,5 +1,5 @@
 import {Schema, model} from 'mongoose';
-import type {IPost} from "../types/index.type";
+import {IPost} from '../types/post.type';
 
 // 创建一个文章模型
 const postSchema = new Schema<IPost>({
