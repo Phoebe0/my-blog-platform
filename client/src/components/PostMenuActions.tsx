@@ -65,6 +65,29 @@ const PostMenuActions = ({post}) => {
             toast.error(error.message)
         }
     })
+    // 推荐文章
+    const featurePost = useMutation({
+        mutationFn: async () => {
+            const token = await getToken();
+            return axios.patch(`${import.meta.env.VITE_API_URL}/posts/feature`,
+                {
+                    postId: post._id,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["post", post.slug]});
+        },
+        onError: (error: Error) => {
+            toast.error(error.message);
+        },
+    });
+
     const handleDelete = () => {
         deletePost.mutate()
     }
@@ -75,6 +98,9 @@ const PostMenuActions = ({post}) => {
             return
         }
         savePost.mutate()
+    }
+    const handleFeature = () => {
+        featurePost.mutate()
     }
     // 判断当前登录用户是否为admin
     const isAdmin: boolean = user?.publicMetadata.role === 'admin' || false
@@ -102,7 +128,38 @@ const PostMenuActions = ({post}) => {
                     </svg>
                     <span>收藏</span>
                 </div>)}
-
+            {isAdmin && (
+                <div
+                    className="flex items-center gap-2 py-2 text-sm cursor-pointer"
+                    onClick={handleFeature}
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 48 48"
+                        width="20px"
+                        height="20px"
+                    >
+                        <path
+                            d="M24 2L29.39 16.26L44 18.18L33 29.24L35.82 44L24 37L12.18 44L15 29.24L4 18.18L18.61 16.26L24 2Z"
+                            stroke="lightgreen"
+                            strokeWidth="2"
+                            fill={
+                                featurePost.isPending
+                                    ? post.isFeatured
+                                        ? "none"
+                                        : "lightgreen"
+                                    : post.isFeatured
+                                        ? "lightgreen"
+                                        : "none"
+                            }
+                        />
+                    </svg>
+                    <span>推荐</span>
+                    {featurePost.isPending && (
+                        <span className="text-xs">(稍等喵...)</span>
+                    )}
+                </div>
+            )}
             {/*如果是当前文章的作者 或 admin 用户，则可以删除*/}
             {user && (post.user.username === user?.username || isAdmin) && (
                 <div className='flex items-center gap-2 py-2 text-sm cursor-pointer' onClick={handleDelete}>

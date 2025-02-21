@@ -43,7 +43,7 @@ connectDB().then(() => {
     app.use(cors({
         origin: process.env.CLIENT_URL, // 确保这里是正确的
         allowedHeaders: ['Content-Type', 'Authorization'],
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
         optionsSuccessStatus: 204
     }));
 

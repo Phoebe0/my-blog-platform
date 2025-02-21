@@ -1,9 +1,10 @@
-import {getPosts, getPost, createPost, deletePost, uploadAuth} from "./post.controller";
+import {getPosts, getPost, createPost, deletePost, uploadAuth, featuredPost} from "./post.controller";
 
 export {
     getPosts,
     getPost,
     createPost,
     deletePost,
-    uploadAuth
+    uploadAuth,
+    featuredPost
 };

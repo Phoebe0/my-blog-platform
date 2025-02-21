@@ -62,7 +62,7 @@ const createPost = async (req: Request, res: Response) => {
 }
 // 删除文章
 const deletePost = async (req: Request, res: Response) => {
-// 删除文章之前首先校验用户是否登录
+    // 删除文章之前首先校验用户是否登录
     const clerkUserId: string | undefined = req.auth?.userId;
     if (!clerkUserId) {
         res.status(401).json({message: '认证失败'});
@@ -88,6 +88,42 @@ const deletePost = async (req: Request, res: Response) => {
     }
     res.status(200).json('文章删除成功！');
 }
+// 推荐文章
+const featuredPost = async (req: Request, res: Response) => {
+    const clerkUserId: string | undefined = req.auth?.userId;
+    const postId: string = req.body.postId;
+
+    if (!clerkUserId) {
+        res.status(401).json("认证失败")
+        return
+    }
+
+    const role: string = req.auth?.sessionClaims?.metadata?.role || "user";
+
+    if (role !== "admin") {
+        res.status(403).json("你不能推荐文章")
+        return
+    }
+
+    const post = await PostModel.findById(postId);
+
+    if (!post) {
+        res.status(404).json("文章不存在!")
+        return
+    }
+    // 检查当前文章是否已经被推荐
+    const isFeatured: boolean = post.isFeatured;
+    // 更新文章状态
+    const updatedPost = await PostModel.findByIdAndUpdate(
+        postId,
+        {
+            isFeatured: !isFeatured,
+        },
+        {new: true}
+    );
+
+    res.status(200).json(updatedPost);
+}
 // 上传图像
 // 获取imagekit实例
 const imagekit = new ImageKit({
@@ -104,5 +140,6 @@ export {
     getPost,
     createPost,
     deletePost,
-    uploadAuth
+    uploadAuth,
+    featuredPost
 }
