@@ -8,9 +8,9 @@ const Home = () => {
         <div className='mt-4 flex flex-col gap-4'>
             {/*面包屑*/}
             <div className='flex gap-4'>
-                <Link to='/' >Home </Link>
+                <Link to='/'>首页 </Link>
                 <span>·</span>
-                <span className='text-pink-500 font-bold'>Blogs and Articles</span>
+                <span className='text-pink-500 font-bold'>文章和随笔</span>
             </div>
             {/*介绍*/}
             <div className='flex items-center justify-between'>
@@ -43,7 +43,8 @@ const Home = () => {
                             <textPath href='#circlePath' startOffset='50%'>·意载乾坤·</textPath>
                         </text>
                     </svg>
-                    <button className='absolute top-0 right-0  bottom-0 left-0 m-auto w-20 h-20 bg-pink-900 rounded-full flex justify-center items-center'>
+                    <button
+                        className='absolute top-0 right-0  bottom-0 left-0 m-auto w-20 h-20 bg-pink-900 rounded-full flex justify-center items-center'>
                         <svg
                             width="50"
                             height="50"
@@ -61,13 +62,13 @@ const Home = () => {
                 </Link>
             </div>
             {/*目录*/}
-            <MainCategories />
+            <MainCategories/>
             {/*特色文章*/}
             <FeaturedPosts/>
             {/*文章列表*/}
             <div>
                 <h1 className='my-8 text-2xl text-gray-800'>最近</h1>
-                <PostList></PostList>
+                <PostList/>
             </div>
         </div>
 

@@ -22,7 +22,7 @@ const SinglePostPage = () => {
         queryKey: ["post", slug], // 查询键
         queryFn: () => fetchPost(slug)
     })
-    console.log(data)
+    console.log('🍇', data)
     if (isPending) return <div>Loading...</div>
     if (error) return <div>Error: {error.message}</div>
     if (!data) return <div>没找到这篇文章🥹...</div>
@@ -67,12 +67,13 @@ const SinglePostPage = () => {
                     <div className='flex flex-col gap-4 '>
                         {/*用户个人信息：头像 + 昵称 + 个签*/}
                         <div className='flex items-center gap-8'>
-                            {data.user.img && <Image path={data.user.img}
-                                                     className='w-12 h-12 rounded-full object-cover'
-                                                     w={48}
-                                                     h={48}>
+                            {data.user.img &&
+                                <Image src={data.user.img}
+                                       className='w-12 h-12 rounded-full object-cover'
+                                       w={48}
+                                       h={48}>
 
-                            </Image>
+                                </Image>
                             }
                             <Link to='/' className='text-rose-800'>{data.user.username}</Link>
                         </div>

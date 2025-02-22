@@ -2,9 +2,14 @@ import Image from "./Image.tsx";
 import {Link} from "react-router-dom";
 
 import {format} from "timeago.js";
+import {MyPost} from "../types/common";
 
+// 定义 PostListItem 的 props 类型
+interface PostListItemProps {
+    post: MyPost;
+}
 
-const PostListItem = ({post}) => {
+const PostListItem = ({post}: PostListItemProps) => {
 
 
     return (
@@ -22,10 +27,10 @@ const PostListItem = ({post}) => {
                 {/*副标题*/}
                 <div className='flex items-center gap-2 text-gray-500 text-sm'>
                     <span>作者：</span>
-                    <Link to={`/posts?author=${post.user.username}`}
+                    <Link to={`/posts?author=${post.user?.username}`}
                           className='text-fuchsia-500'>{post.user?.username || '未识别'}</Link>
                     <span>·</span>
-                    <Link to={`/posts?author=${post.user.username}`}
+                    <Link to={`/posts?author=${post.user?.username}`}
                           className='text-rose-500'>{post.category || '未识别'}</Link>
                     <span>{format(post.createdAt)}</span>
                 </div>

@@ -1,15 +1,8 @@
 import {toast} from "react-toastify";
-import {AuthenticatorResponse, UploadSuccessResponse} from "../types/post.d.ts";
+import type {AuthenticatorResponse, UploadSuccessResponse, UploadProps} from "../types/post.d.ts";
 import {IKContext, IKUpload} from "imagekitio-react";
 import React, {useRef} from "react";
 
-// 定义组件的 props 类型
-interface UploadProps {
-    children: React.ReactNode; // children 是 React 节点
-    type: string; // 文件类型，例如 "image" 或 "video"
-    setProgress: (progress: number) => void; // 更新上传进度的函数
-    setData: (data: string) => void; // 设置上传成功后的文件路径的函数
-}
 
 // 图像上传身份验证
 const authenticator = async (): Promise<AuthenticatorResponse> => {
@@ -24,12 +17,12 @@ const authenticator = async (): Promise<AuthenticatorResponse> => {
         const data = await response.json();
         const {signature, expire, token} = data;
         return {signature, expire, token};
-    } catch (error) {
+    } catch (error: Error | any) {
         throw new Error(`认证失败: ${error.message}`);
     }
 };
 const Upload: React.FC<UploadProps> = ({children, type, setProgress, setData}) => {
-    const ref = useRef<HTMLFormElement>(null);
+    const ref = useRef<HTMLInputElement>(null);
 
 
     // 图片上传出错

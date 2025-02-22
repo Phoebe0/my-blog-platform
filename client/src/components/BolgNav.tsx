@@ -18,8 +18,8 @@ const BlogNav: React.FC = () => {
             {/* logo */}
             {/*使用Link组件，路由导航到根目录下面*/}
             <Link to='/' className='flex items-center gap-2 text-l font-bold font-serif'>
-                <Image path='/MyBlogImgs/logo.png' className='w-10 h-10 rounded-full' w={32} h={32} alt='logo' />
-                <span>Tricia's Blog</span>
+                <Image path='/MyBlogImgs/logo.png' className='w-10 h-10 rounded-full' w={32} h={32} alt='logo'/>
+                <span>Tricia's World</span>
             </Link>
             {/* 移动端按钮 */}
             <div className='md:hidden'>
@@ -31,10 +31,10 @@ const BlogNav: React.FC = () => {
                 <div className={`w-full h-screen flex flex-col items-center justify-center absolute top-16 
                 ${open ? '-right-0' : '-right-[100%]'} bg-white bg-opacity-50 gap-8 font-medium text-lg transition-all ease-in-out`}
                 >
-                    <Link to='/'>Home</Link>
-                    <Link to='/'>Trending</Link>
-                    <Link to='/'>Like</Link>
-                    <Link to='/'>About</Link>
+                    <Link to='/'>首页</Link>
+                    <Link to='/'>推荐</Link>
+                    <Link to='/'>收藏</Link>
+                    <Link to='/'>个人中心</Link>
                     <Link to='/'>
                         <button className='py-2 px-4 rounded-full bg-pink-600 text-white font-bold'>Login😺</button>
                     </Link>
@@ -42,10 +42,10 @@ const BlogNav: React.FC = () => {
             </div>
             {/* web端按钮 */}
             <div className='hidden md:flex items-center gap-8 xl:gap-12 font-medium'>
-                <Link to='/'>Home</Link>
-                <Link to='/'>Trending</Link>
-                <Link to='/'>Like</Link>
-                <Link to='/'>About</Link>
+                <Link to='/'>首页</Link>
+                <Link to='/'>推荐</Link>
+                <Link to='/'>收藏</Link>
+                <Link to='/'>个人中心</Link>
 
                 <SignedOut>
                     <Link to='/login'>
@@ -53,7 +53,7 @@ const BlogNav: React.FC = () => {
                     </Link>
                 </SignedOut>
                 <SignedIn>
-                    <UserButton />
+                    <UserButton/>
                 </SignedIn>
             </div>
         </div>

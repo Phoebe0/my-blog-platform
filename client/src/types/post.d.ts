@@ -1,6 +1,7 @@
 // 文章数据接口
-import React from "react";
+import React, {SetStateAction,} from "react";
 
+// 提交时的post类型
 export interface PostData {
     img: string;
     title: FormDataEntryValue | null;
@@ -29,14 +30,14 @@ export interface UploadError {
     stack?: string
 }
 
-
-// 文章类型
-// 定义文章类型
-export interface Post {
-    _id: string;
-    title: string;
-    content: string;
+// 定义上传组件的 props 类型
+export interface UploadProps {
+    children: React.ReactNode; // children 是 React 节点
+    type: string; // 文件类型，例如 "image" 或 "video"
+    setProgress: (progress: number) => void; // 更新上传进度的函数
+    setData: React.Dispatch<SetStateAction<{ filePath: string } | undefined>>; // 设置上传成功后的文件路径的函数
 }
+
 
 // 定义分页响应类型
 export interface PostsResponse {

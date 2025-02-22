@@ -16,7 +16,9 @@ const WriteBlogPage = () => {
     const {isLoaded, isSignedIn} = useUser()
     // 使用useState管理富文本数据
     const [posts, setPosts] = useState<string>('');
-    const [cover, setCover] = useState<string>('');
+    const [cover, setCover] = useState<{
+        filePath: string;
+    }>();
     const [img, setImg] = useState<any>('');
     const [video, setVideo] = useState<any>('');
     const [progress, setProgress] = useState<number>(0);

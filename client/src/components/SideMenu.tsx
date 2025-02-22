@@ -1,5 +1,5 @@
 import Search from "./Search.tsx";
-import {Link, useSearchParams} from "react-router-dom";
+import {useSearchParams} from "react-router-dom";
 
 const SideMenu = () => {
     const [searchParams, setSearchParams] = useSearchParams()
