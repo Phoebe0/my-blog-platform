@@ -33,6 +33,7 @@ connectDB().then(() => {
     // 注意：一定要写在最前面
     app.use('/webhooks', webhookRouter); // 为 webhookRouter 添加前缀 /webhooks
     // 跨域处理
+    
     if (process.env.NODE_ENV !== 'production') {
         app.use(cors({
             origin: process.env.CLIENT_URL,
