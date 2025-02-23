@@ -53,10 +53,10 @@ const PostComments = ({postId}) => {
             queryClient.invalidateQueries({queryKey: ["comments", postId]})
 
         },
-        onError: (error, newTodo, context) => {
+        onError: (error: Error, context) => {
             // 如果出现错误，恢复评论列表为提交前的状态
             queryClient.setQueryData(["comments", postId], context.previousComments);
-            toast.error(error.reponse.data)
+            toast.error(error.message)
         }
     })
     const textareaRef = useRef<HTMLTextAreaElement>(null); // 创建一个 ref 来引用 textarea

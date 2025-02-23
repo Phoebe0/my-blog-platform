@@ -3,8 +3,14 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
 import {toast} from "react-toastify";
 import {useNavigate} from "react-router-dom";
+import {MyPost} from "../types/common";
 
-const PostMenuActions = ({post}) => {
+// 定义 PostListItem 的 props 类型
+interface PostListItemProps {
+    post: MyPost;
+}
+
+const PostMenuActions = ({post}: PostListItemProps) => {
     const {user} = useUser()
     const {getToken} = useAuth()
     const navigate = useNavigate()
@@ -161,7 +167,7 @@ const PostMenuActions = ({post}) => {
                 </div>
             )}
             {/*如果是当前文章的作者 或 admin 用户，则可以删除*/}
-            {user && (post.user.username === user?.username || isAdmin) && (
+            {user && (post.user?.username === user?.username || isAdmin) && (
                 <div className='flex items-center gap-2 py-2 text-sm cursor-pointer' onClick={handleDelete}>
                     <svg
                         width="20"

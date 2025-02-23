@@ -4,8 +4,9 @@ import {useAuth, useUser} from "@clerk/clerk-react";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
 import {toast} from "react-toastify";
+import type {PostCommentProps} from '../types/comment.d.ts';
 
-const PostComment = ({comment, postId}) => {
+const PostComment: React.FC<PostCommentProps> = ({comment, postId}) => {
     // 确保 comment.user 存在
     const cuser = comment.user || {}; // 如果 comment.user 为 null 或 undefined，默认值为 {}
     const {user} = useUser()

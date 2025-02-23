@@ -21,7 +21,7 @@ export type MyPost = {
 
 // 图片类型
 export interface ImageProps {
-    urlEndpoint: string | undefined;
+    urlEndpoint?: string | undefined;
     path?: string | undefined;
     src?: string | undefined;
     className?: string;

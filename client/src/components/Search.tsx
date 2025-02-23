@@ -5,9 +5,9 @@ const Search = () => {
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
     // 监听搜索框的输入
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            const query = e.target.value
+            const query = e.currentTarget.value
             // 如果当前路径是/posts, 则直接更新searchParams
             // 如果当前路径不是/posts, 则跳转到/posts?search=query
             if (location.pathname === '/posts') {
