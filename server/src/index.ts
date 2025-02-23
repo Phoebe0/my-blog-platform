@@ -4,6 +4,7 @@ import {userRouter, postRouter, commentRouter, webhookRouter} from './routes/ind
 import {requireAuth, clerkMiddleware} from '@clerk/express'
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from "path";
 
 dotenv.config(); // 加载 .env 文件中的环境变量
 
@@ -18,18 +19,28 @@ declare module 'express' {
 }
 // 创建应用
 const app = express();
+// 在路由定义之前添加静态文件服务
+if (process.env.NODE_ENV === 'production') {
+    const path = require('path');
+    app.use(express.static(path.join(__dirname, '../../client/dist')));
+
+}
+
 
 // 连接数据库, 连接成功后再使用路由
 connectDB().then(() => {
     // 使用webhooks从 Clerk 向服务器回调用户登录信息
     // 注意：一定要写在最前面
     app.use('/webhooks', webhookRouter); // 为 webhookRouter 添加前缀 /webhooks
-    app.use(cors({
-        origin: process.env.CLIENT_URL, // 确保这里是正确的
-        allowedHeaders: ['Content-Type', 'Authorization'],
-        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-        optionsSuccessStatus: 204
-    }));
+    // 跨域处理
+    if (process.env.NODE_ENV !== 'production') {
+        app.use(cors({
+            origin: process.env.CLIENT_URL,
+            allowedHeaders: ['Content-Type', 'Authorization'],
+            methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+            optionsSuccessStatus: 204
+        }));
+    }
 
     app.use(express.json());
 
@@ -73,7 +84,20 @@ connectDB().then(() => {
             stack: err.stack
         });
     });
-// 监听端口号（注意：两个不同的设备不要端口冲突）
+    // 处理React路由
+    if (process.env.NODE_ENV === 'production') {
+        app.get(/.*/, (req: Request, res: Response) => {
+            const filePath = path.join(__dirname, '../../client/dist', 'index.html');
+            console.log('Serving file from:', filePath); // 调试路径
+            res.sendFile(filePath, (err) => {
+                if (err) {
+                    console.error('Error serving file:', err);
+                    res.status(500).send('Internal Server Error');
+                }
+            });
+        });
+    }
+    // 监听端口号（注意：两个不同的设备不要端口冲突）
     app.listen(3038, () => {
         console.log('Server is running !');
     });
