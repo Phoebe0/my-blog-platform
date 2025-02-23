@@ -33,7 +33,7 @@ connectDB().then(() => {
     // 注意：一定要写在最前面
     app.use('/webhooks', webhookRouter); // 为 webhookRouter 添加前缀 /webhooks
     // 跨域处理
-    
+
     if (process.env.NODE_ENV !== 'production') {
         app.use(cors({
             origin: process.env.CLIENT_URL,
@@ -99,7 +99,7 @@ connectDB().then(() => {
         });
     }
     // 监听端口号（注意：两个不同的设备不要端口冲突）
-    app.listen(3038, () => {
+    app.listen(3038, '0.0.0.0', () => {
         console.log('Server is running !');
     });
 
