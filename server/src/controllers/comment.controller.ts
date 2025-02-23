@@ -26,7 +26,7 @@ const addComment = async (req: Request, res: Response) => {
         {
             ...req.body,
             postId: postId,
-            user: user._id
+            user: user?._id
         }
     )
 
@@ -56,7 +56,7 @@ const deletePostComment = async (req: Request, res: Response) => {
     // 删除评论
     const deletedComment = await CommentModel.findByIdAndDelete({
         _id: id,
-        user: user._id
+        user: user?._id
     });
     if (!deletedComment) {
         res.status(404).json('你只能删除你自己的评论～');
