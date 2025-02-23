@@ -13,7 +13,7 @@ const Image: React.FC<ImageProps> = ({path, src, className, w, h, alt = ''}) => 
     return (
         <IKImage
             urlEndpoint={urlEndpoint}
-            path={path}
+            path={path || undefined}
             src={src}
             className={className}
             loading={loading}

@@ -9,12 +9,12 @@ import type {PostData} from "../types/post.d.ts";
 import type {FormSubmitEvent} from '../types/common.d.ts'
 import {useRef} from "react";
 
-const fetchComments = async (postId) => {
+const fetchComments = async (postId: string) => {
     const res = await axios.get(`${import.meta.env.VITE_API_URL}/comments/${postId}`)
     return res.data
 }
 
-const PostComments = ({postId}) => {
+const PostComments = ({postId}: { postId: string }) => {
     const {user} = useUser()
     const {getToken} = useAuth()
     console.log(user)
@@ -25,7 +25,7 @@ const PostComments = ({postId}) => {
         queryFn: () => fetchComments(postId)
     })
     const mutation = useMutation({
-        mutationFn: async (newComment: PostData) => {
+        mutationFn: async (newComment: Comment) => {
             // 新增评论之前需要做鉴权
             const token: string = await getToken() || ''
             return axios.post(`${import.meta.env.VITE_API_URL}/comments/${postId}`, newComment, {
@@ -39,7 +39,7 @@ const PostComments = ({postId}) => {
             const previousComments = queryClient.getQueryData(["comments", postId]);
 
             // 直接为评论列表添加新的评论（模拟成功提交）
-            queryClient.setQueryData(["comments", postId], (old) => [
+            queryClient.setQueryData(["comments", postId], (old: Comment[]) => [
 
                 {...newComment, createdAt: new Date(), _id: Math.random().toString()}, // 模拟新的评论 ID
                 ...old,
@@ -53,7 +53,7 @@ const PostComments = ({postId}) => {
             queryClient.invalidateQueries({queryKey: ["comments", postId]})
 
         },
-        onError: (error: Error, context) => {
+        onError: (error: Error, context: { previousComments: Comment[] }) => {
             // 如果出现错误，恢复评论列表为提交前的状态
             queryClient.setQueryData(["comments", postId], context.previousComments);
             toast.error(error.message)
@@ -66,7 +66,7 @@ const PostComments = ({postId}) => {
         const formData = new FormData(e.currentTarget)
         console.log(formData)
         const data: Comment = {
-            desc: formData.get("desc") || '',
+            desc: formData.get("desc")?.toString() || '',
             post: postId
         }
         mutation.mutate(data)
@@ -103,7 +103,7 @@ const PostComments = ({postId}) => {
                     {/*        }}/>*/}
                     {/*    )*/}
                     {/*}*/}
-                    {data.map(comment => (
+                    {data.map((comment: Comment) => (
 
                         <PostComment key={comment._id} comment={comment} postId={postId}/>
                     ))}
