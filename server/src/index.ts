@@ -8,7 +8,7 @@ import path, {dirname} from "path";
 import {fileURLToPath} from 'url';
 
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = process.cwd();
 
 dotenv.config(); // 加载 .env 文件中的环境变量
 
