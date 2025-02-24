@@ -1,9 +1,9 @@
 module.exports = {
     apps: [{
         name: "my-blog-platform",
-        script: "src/index.ts",
+        script: "./src/index.ts",
         interpreter: "node",
-        cwd: "/Users/mac/Desktop/Project/my-blog-platform/server", // 添加绝对路径
+        cwd: __dirname,
         watch: true,
         ignore_watch: ["node_modules", "client"],
         interpreter_args: [
