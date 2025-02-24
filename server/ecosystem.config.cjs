@@ -9,6 +9,7 @@ module.exports = {
         interpreter_args: [
             "--loader=ts-node/esm",
             "--no-warnings",
+            "--experimental-vm-modules",
             "--experimental-specifier-resolution=node"
         ].join(' '),
         env: {

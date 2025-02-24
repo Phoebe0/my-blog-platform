@@ -7,8 +7,8 @@ import dotenv from 'dotenv';
 import path, {dirname} from "path";
 import {fileURLToPath} from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 dotenv.config(); // 加载 .env 文件中的环境变量
 
