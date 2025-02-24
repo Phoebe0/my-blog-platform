@@ -4,6 +4,9 @@
   "description": "",
   "main": "src/index.ts",
   "type": "module",
+  "imports": {
+    "#/*": "./src/*.ts"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --loader ts-node/esm ./src/index.ts",

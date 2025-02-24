@@ -1,5 +1,5 @@
 import express, {Request, Response} from 'express';
-import connectDB from './lib/connectDB';
+import connectDB from '@/lib/connectDB';
 import {userRouter, postRouter, commentRouter, webhookRouter} from './routes/index.route'; // 导入路由数组
 import {requireAuth, clerkMiddleware} from '@clerk/express'
 import cors from 'cors';
