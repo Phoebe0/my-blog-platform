@@ -25,7 +25,7 @@ declare module 'express' {
 const app = express();
 // 在路由定义之前添加静态文件服务
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../../client/dist')));
+    app.use(express.static(path.join(__dirname, '../../../client/dist')));
 
 }
 
@@ -91,7 +91,7 @@ connectDB().then(() => {
     // 处理React路由
     if (process.env.NODE_ENV === 'production') {
         app.get(/.*/, (req: Request, res: Response) => {
-            const filePath = path.join(__dirname, '../../client/dist', 'index.html');
+            const filePath = path.join(__dirname, '../../../client/dist', 'index.html');
             console.log('Serving file from:', filePath); // 调试路径
             res.sendFile(filePath, (err) => {
                 if (err) {
