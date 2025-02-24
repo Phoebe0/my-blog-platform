@@ -3,10 +3,14 @@ module.exports = {
         name: "my-blog-platform",
         script: "src/index.ts",
         interpreter: "node",
-        interpreter_args: "--loader=ts-node/esm --no-warnings --experimental-specifier-resolution=node",
         cwd: "/Users/mac/Desktop/Project/my-blog-platform/server", // 添加绝对路径
         watch: true,
         ignore_watch: ["node_modules", "client"],
+        interpreter_args: [
+            "--loader=ts-node/esm",
+            "--no-warnings",
+            "--experimental-specifier-resolution=node"
+        ].join(' '),
         env: {
             NODE_ENV: "production",
             TS_NODE_SKIP_PROJECT: "1",

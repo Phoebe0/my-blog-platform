@@ -21,7 +21,6 @@ declare module 'express' {
 const app = express();
 // 在路由定义之前添加静态文件服务
 if (process.env.NODE_ENV === 'production') {
-    const path = require('path');
     app.use(express.static(path.join(__dirname, '../../client/dist')));
 
 }
