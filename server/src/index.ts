@@ -1,10 +1,14 @@
 import express, {Request, Response} from 'express';
 import connectDB from './lib/connectDB';
 import {userRouter, postRouter, commentRouter, webhookRouter} from './routes/index.route'; // 导入路由数组
-import {requireAuth, clerkMiddleware} from '@clerk/express'
+import {clerkMiddleware} from '@clerk/express'
 import cors from 'cors';
 import dotenv from 'dotenv';
-import path from "path";
+import path, {dirname} from "path";
+import {fileURLToPath} from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 dotenv.config(); // 加载 .env 文件中的环境变量
 
