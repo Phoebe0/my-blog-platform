@@ -66,7 +66,7 @@ connectDB().then(() => {
     // 错误处理中间件应该放在路由定义的后面
     // Express5中，错误处理不再用try-catch，而是使用中间件。传入4个参数
     // 参数：err, req, res, next，分别表示错误对象、请求对象、响应对象、下一个中间件
-    app.use((err: Error, req: Request, res: Response, next: any) => {
+    app.use((err: Error, req: Request, res: Response) => {
         res.status(500).json({
             message: err.message,
             code: 500,
