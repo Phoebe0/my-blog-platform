@@ -100,7 +100,7 @@ connectDB().then(() => {
     }
     // 监听端口号（注意：两个不同的设备不要端口冲突）
     app.listen(3038, '0.0.0.0', () => {
-        console.log('Server is running !');
+        console.log(`Server running on port ${process.env.PORT || 3038}`);
     });
 
 }).catch((err) => {
