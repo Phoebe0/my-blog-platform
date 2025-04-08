@@ -18,7 +18,7 @@ interface IPost extends Document {
 interface Post {
     _id: string;
     title: string;
-    user: string | undefined | unknown;
+    user: string | undefined;
     // 添加文章其他属性
     isFeatured: boolean;
     createdAt: string;
@@ -28,7 +28,7 @@ interface PostQuery {
     createdAt?: { $gte: Date };
     category?: string;
     title?: {} | undefined;
-    user?: string | undefined | unknown;
+    user?: string | undefined;
     isFeatured?: boolean;
 }
 

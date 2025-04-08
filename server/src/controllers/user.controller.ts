@@ -26,14 +26,14 @@ const savePost = async (req: Request, res: Response) => {
     }
     const user = await UserModel.findOne({clerkUserId})
     // 判断是否收藏了
-    const isSaved = user?.savedPosts.some((p: string) => p === postId) // 通过some函数，判断是否收藏了
+    const isSaved = user.savedPosts.some((p: string) => p === postId) // 通过some函数，判断是否收藏了
     if (!isSaved) {
         // 如果没有收藏，就收藏
-        await UserModel.findByIdAndUpdate(user?._id, {
+        await UserModel.findByIdAndUpdate(user._id, {
             $push: {savedPosts: postId}
         })
     } else {
-        await UserModel.findByIdAndUpdate(user?._id, {
+        await UserModel.findByIdAndUpdate(user._id, {
             // 如果收藏了，就取消收藏
             $pull: {savedPosts: postId}
         })

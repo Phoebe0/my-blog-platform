@@ -1,14 +1,9 @@
 import express, {Request, Response} from 'express';
 import connectDB from './lib/connectDB';
 import {userRouter, postRouter, commentRouter, webhookRouter} from './routes/index.route'; // 导入路由数组
-import {clerkMiddleware} from '@clerk/express'
+import {requireAuth, clerkMiddleware} from '@clerk/express'
 import cors from 'cors';
 import dotenv from 'dotenv';
-import path, {dirname} from "path";
-import {fileURLToPath} from 'url';
-
-
-const __dirname = process.cwd();
 
 dotenv.config(); // 加载 .env 文件中的环境变量
 
@@ -23,28 +18,18 @@ declare module 'express' {
 }
 // 创建应用
 const app = express();
-// 在路由定义之前添加静态文件服务
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/dist')));
-
-}
-
 
 // 连接数据库, 连接成功后再使用路由
 connectDB().then(() => {
     // 使用webhooks从 Clerk 向服务器回调用户登录信息
     // 注意：一定要写在最前面
     app.use('/webhooks', webhookRouter); // 为 webhookRouter 添加前缀 /webhooks
-    // 跨域处理
-
-    if (process.env.NODE_ENV !== 'production') {
-        app.use(cors({
-            origin: process.env.CLIENT_URL,
-            allowedHeaders: ['Content-Type', 'Authorization'],
-            methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-            optionsSuccessStatus: 204
-        }));
-    }
+    app.use(cors({
+        origin: process.env.CLIENT_URL, // 确保这里是正确的
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+        optionsSuccessStatus: 204
+    }));
 
     app.use(express.json());
 
@@ -81,29 +66,16 @@ connectDB().then(() => {
     // 错误处理中间件应该放在路由定义的后面
     // Express5中，错误处理不再用try-catch，而是使用中间件。传入4个参数
     // 参数：err, req, res, next，分别表示错误对象、请求对象、响应对象、下一个中间件
-    app.use((err: Error, req: Request, res: Response, next: (err?: Error) => void) => {
+    app.use((err: Error, req: Request, res: Response) => {
         res.status(500).json({
             message: err.message,
             code: 500,
             stack: err.stack
         });
     });
-    // 处理React路由
-    if (process.env.NODE_ENV === 'production') {
-        app.get(/.*/, (req: Request, res: Response) => {
-            const filePath = path.join(__dirname, '../client/dist', 'index.html');
-            console.log('Serving file from:', filePath); // 调试路径
-            res.sendFile(filePath, (err) => {
-                if (err) {
-                    console.error('Error serving file:', err);
-                    res.status(500).send('Internal Server Error');
-                }
-            });
-        });
-    }
-    // 监听端口号（注意：两个不同的设备不要端口冲突）
-    app.listen(3038, '0.0.0.0', () => {
-        console.log(`Server running on port ${process.env.PORT || 3038}`);
+// 监听端口号（注意：两个不同的设备不要端口冲突）
+    app.listen(3038, () => {
+        console.log('Server is running !');
     });
 
 }).catch((err) => {

@@ -66,8 +66,8 @@ export const clerkWebhook = async (req: Request, res: Response): Promise<void> =
             clerkUserId: evt.data?.id,
         });
 
-        await PostModel.deleteMany({user: deletedUser?._id})
-        await CommentModel.deleteMany({user: deletedUser?._id})
+        await PostModel.deleteMany({user: deletedUser._id})
+        await CommentModel.deleteMany({user: deletedUser._id})
     }
 
 };
